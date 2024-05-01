@@ -98,3 +98,20 @@ jobs:
           name: coverage-report-${{ matrix.os }}
           path: coverage.xml
           if-no-files-found: error
+      - if: matrix.mpi
+        name: Collect coverage for MPI-using code
+        run: |
+          conda install --quiet --yes mpi4py
+          mpiexec -n 2 \
+          coverage run --parallel-mode \
+          -m mpi4py -m pytest \
+          src/parameter_sweep/tests/test*parameter_sweep.py \
+          src/parameter_sweep/loop_tool/tests/test*loop_tool.py \
+          --no-cov
+      - name: Upload coverage report as job artifact
+        if: matrix.mpi
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-mpi-${{ matrix.os }}
+          path: coverage.xml
+          if-no-files-found: error
