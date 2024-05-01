@@ -18,13 +18,13 @@ import ast
 
 from pyomo.environ import value
 
-from watertap.tools.parameter_sweep.sampling_types import *
-from watertap.tools.parameter_sweep import (
+from parameter_sweep.sampling_types import *
+from parameter_sweep import (
     RecursiveParameterSweep,
     recursive_parameter_sweep,
 )
-from watertap.tools.parameter_sweep.parameter_sweep_writer import *
-from watertap.tools.parameter_sweep.tests.test_parameter_sweep import (
+from parameter_sweep.parameter_sweep_writer import *
+from parameter_sweep.tests.test_parameter_sweep import (
     _read_output_h5,
     _get_rank0_path,
     _assert_dictionary_correctness,

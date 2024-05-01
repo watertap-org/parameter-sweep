@@ -2,9 +2,9 @@ Parameter Sweep Tool
 ====================
 
 .. index::
-   pair: watertap.tools.parameter_sweep;parameter_sweep
+   pair: parameter_sweep;parameter_sweep
 
-.. currentmodule:: watertap.tools.parameter_sweep
+.. currentmodule:: parameter_sweep
 
 Overview
 --------
@@ -80,4 +80,4 @@ as an argument.
 Module Documentation
 --------------------
 
-* :mod:`watertap.tools.parameter_sweep`
+* :mod:`parameter_sweep`

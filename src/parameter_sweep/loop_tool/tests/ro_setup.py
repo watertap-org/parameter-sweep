@@ -11,13 +11,13 @@
 #################################################################################
 
 import watertap.examples.flowsheets.RO_with_energy_recovery.RO_with_energy_recovery as ro_erd
-from watertap.tools.parameter_sweep.parameter_sweep import (
+from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,
 )
-from watertap.tools.parameter_sweep.parameter_sweep_reader import ParameterSweepReader
+from parameter_sweep.parameter_sweep_reader import ParameterSweepReader
 
-from watertap.tools.parameter_sweep.parameter_sweep_differential import (
+from parameter_sweep.parameter_sweep_differential import (
     DifferentialParameterSweep,
 )
 from watertap.core.solvers import get_solver

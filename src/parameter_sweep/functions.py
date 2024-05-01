@@ -10,11 +10,11 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
-from watertap.tools.parameter_sweep.parameter_sweep import (
+from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,
 )
-from watertap.tools.parameter_sweep.parameter_sweep_differential import (
+from parameter_sweep.parameter_sweep_differential import (
     DifferentialParameterSweep,
 )
 

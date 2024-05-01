@@ -17,9 +17,9 @@ import pyomo.environ as pyo
 
 from pyomo.environ import value
 
-from watertap.tools.parameter_sweep.sampling_types import *
-from watertap.tools.parameter_sweep import ParameterSweep, parameter_sweep
-from watertap.tools.parameter_sweep.parameter_sweep_writer import *
+from parameter_sweep.sampling_types import *
+from parameter_sweep import ParameterSweep, parameter_sweep
+from parameter_sweep.parameter_sweep_writer import *
 
 import watertap.tools.MPI as MPI
 from watertap.tools.parallel.parallel_manager_factory import has_mpi_peer_processes

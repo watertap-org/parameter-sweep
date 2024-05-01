@@ -9,7 +9,7 @@
 # information, respectively. These files are also available online at the URL
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
-from watertap.tools.parameter_sweep.sampling_types import (
+from parameter_sweep.sampling_types import (
     SamplingType,
     LinearSample,
     GeomSample,
@@ -20,22 +20,22 @@ from watertap.tools.parameter_sweep.sampling_types import (
     PredeterminedFixedSample,
     PredeterminedRandomSample,
 )
-from watertap.tools.parameter_sweep.parameter_sweep_functions import (
+from parameter_sweep.parameter_sweep_functions import (
     parameter_sweep,
     recursive_parameter_sweep,
     differential_parameter_sweep,
 )
-from watertap.tools.parameter_sweep.parameter_sweep_reader import (
+from parameter_sweep.parameter_sweep_reader import (
     get_sweep_params_from_yaml,
     set_defaults_from_yaml,
     ParameterSweepReader,
 )
-from watertap.tools.parameter_sweep.parameter_sweep import (
+from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,
 )
 
-from watertap.tools.parameter_sweep.parameter_sweep_differential import (
+from parameter_sweep.parameter_sweep_differential import (
     DifferentialParameterSweep,
 )
 

@@ -16,16 +16,16 @@ import copy
 import numpy as np
 import pyomo.environ as pyo
 
-from watertap.tools.parameter_sweep.sampling_types import (
+from parameter_sweep.sampling_types import (
     NormalSample,
     GeomSample,
     UniformSample,
 )
-from watertap.tools.parameter_sweep import (
+from parameter_sweep import (
     DifferentialParameterSweep,
     differential_parameter_sweep,
 )
-from watertap.tools.parameter_sweep.tests.test_parameter_sweep import (
+from parameter_sweep.tests.test_parameter_sweep import (
     _read_output_h5,
     _get_rank0_path,
     _assert_dictionary_correctness,
@@ -37,7 +37,7 @@ from watertap.tools.parameter_sweep.tests.test_parameter_sweep import (
 )
 import watertap.tools.MPI as MPI
 
-from watertap.tools.parameter_sweep.model_manager import ModelManager
+from parameter_sweep.model_manager import ModelManager
 
 
 def build_none_outputs(model):

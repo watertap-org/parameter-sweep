@@ -13,8 +13,8 @@ import numpy as np
 import warnings
 from pyomo.common.config import ConfigValue
 
-from watertap.tools.parameter_sweep.sampling_types import NormalSample
-from watertap.tools.parameter_sweep.parameter_sweep import (
+from parameter_sweep.sampling_types import NormalSample
+from parameter_sweep.parameter_sweep import (
     _ParameterSweepBase,
     ParameterSweep,
 )
@@ -23,7 +23,7 @@ from watertap.tools.parallel.single_process_parallel_manager import (
 )
 
 from pyomo.common.deprecation import deprecation_warning
-from watertap.tools.parameter_sweep.paramter_sweep_parallel_utils import (
+from parameter_sweep.paramter_sweep_parallel_utils import (
     _ParameterSweepParallelUtils,
     return_none,
 )

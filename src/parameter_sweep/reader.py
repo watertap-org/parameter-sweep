@@ -10,7 +10,7 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
-from watertap.tools.parameter_sweep.sampling_types import (
+from parameter_sweep.sampling_types import (
     LinearSample,
     GeomSample,
     ReverseGeomSample,
