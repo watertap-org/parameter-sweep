@@ -1,3 +1,5 @@
 black==24.3.0
+pytest-cov
+coverage
 --editable .[testing,ray]
 watertap @ git+https://github.com/watertap-org/watertap@main
