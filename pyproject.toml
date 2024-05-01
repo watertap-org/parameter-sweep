@@ -1,0 +1,32 @@
+[build-system]
+requires = [
+    "setuptools >= 64",
+    "setuptools_scm >= 7",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parameter-sweep" 
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    "pyomo",
+    "numpy",
+    "h5py",
+    "pyyaml",
+    # both idaes-pse and watertap should be removed from core dependencies ASAP
+    "idaes-pse",  # idaes.core.surrogate.pysmo.sampling
+    "watertap @ https://github.com/watertap-org/watertap@main",  # watertap.core.solvers.get_solver()
+]
+[project.optional-dependencies]
+ray = [
+    "ray",
+]
+mpi = [
+    "mpi4py",
+]
+testing = [
+    "pytest>=8",
+    "requests",  # for src/parameter_sweep/tests/test_parameter_sweep.py
+]
+[tool.setuptools_scm]
