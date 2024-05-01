@@ -9,6 +9,11 @@ env:
   PYTEST_ADDOPTS: --color=yes
   PIP_PROGRESS_BAR: "off"
 
+defaults:
+  run:
+    # -l: login shell, needed when using Conda:
+    shell: bash -l {0}
+
 jobs:
 
   code-formatting:
@@ -57,9 +62,11 @@ jobs:
     steps:
       - if: matrix.install-mode == 'dev'
         uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: conda-incubator/setup-miniconda@v3
         with:
+          auto-update-conda: true
           python-version: ${{ matrix.python-version }}
+          activate-environment: ${{ matrix.install-mode == 'dev' && 'parameter-sweep-dev' || 'parameter-sweep' }}
       - if: matrix.install-mode == 'dev'
         name: Install (dev)
         run: |
