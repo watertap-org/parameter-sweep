@@ -12,8 +12,8 @@
 
 import numpy
 
-from watertap.tools.parallel.results import LocalResults
-from watertap.tools.parallel.parallel_manager import build_and_execute, ParallelManager
+from parameter_sweep.parallel.results import LocalResults
+from parameter_sweep.parallel.parallel_manager import build_and_execute, ParallelManager
 
 
 class MPIParallelManager(ParallelManager):

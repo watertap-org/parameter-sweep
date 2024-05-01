@@ -12,7 +12,7 @@
 
 import pytest
 
-from watertap.tools.parallel.multiprocessing_parallel_manager import (
+from parameter_sweep.parallel.multiprocessing_parallel_manager import (
     MultiprocessingParallelManager,
 )
 

@@ -11,14 +11,14 @@
 #################################################################################
 
 from pyomo.common.dependencies import attempt_import
-from watertap.tools.parallel.mpi_parallel_manager import MPIParallelManager
-from watertap.tools.parallel.concurrent_futures_parallel_manager import (
+from parameter_sweep.parallel.mpi_parallel_manager import MPIParallelManager
+from parameter_sweep.parallel.concurrent_futures_parallel_manager import (
     ConcurrentFuturesParallelManager,
 )
-from watertap.tools.parallel.single_process_parallel_manager import (
+from parameter_sweep.parallel.single_process_parallel_manager import (
     SingleProcessParallelManager,
 )
-from watertap.tools.parallel.multiprocessing_parallel_manager import (
+from parameter_sweep.parallel.multiprocessing_parallel_manager import (
     MultiprocessingParallelManager,
 )
 
@@ -26,7 +26,7 @@ from watertap.tools.parallel.multiprocessing_parallel_manager import (
 MPI, mpi4py_available = attempt_import("mpi4py.MPI", defer_check=False)
 ray, ray_avaialble = attempt_import("ray", defer_check=False)
 if ray_avaialble:
-    from watertap.tools.parallel.ray_io_parallel_manager import (
+    from parameter_sweep.parallel.ray_io_parallel_manager import (
         RayIoParallelManager,
     )
 

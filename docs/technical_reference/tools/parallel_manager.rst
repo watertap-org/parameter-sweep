@@ -2,9 +2,9 @@ Parallel Manager
 ====================
 
 .. index::
-    pair: watertap.tools.parallel.parallel_manager;parallel_manager
+    pair: parameter_sweep.parallel.parallel_manager;parallel_manager
 
-.. currentmodule:: watertap.tools.parallel.parallel_manager
+.. currentmodule:: parameter_sweep.parallel.parallel_manager
 
 Overview
 --------
@@ -57,7 +57,7 @@ following statement.
 
 .. code:: python
 
-    from watertap.tools.parallel.parallel_manager_factory import create_parallel_manager
+    from parameter_sweep.parallel.parallel_manager_factory import create_parallel_manager
     parallel_manager = create_parallel_manager(
             parallel_manager_class=None,
             number_of_subprocesses=2,
@@ -76,7 +76,7 @@ Alternatively, the user can specify the parameter sweep class directly, for exam
 
 .. code:: python
 
-    from watertap.tools.parallel.single_process_parallel_manager import SingleProcessParallelManager
+    from parameter_sweep.parallel.single_process_parallel_manager import SingleProcessParallelManager
     s_parallel_manager = create_parallel_manager(
             parallel_manager_class=SingleProcessParallelManager,
             number_of_subprocesses=1,
@@ -86,13 +86,13 @@ Each of the parallel manager classes inherits from the base ``ParallelManager``
 class and defines the abstract methods. The methods can be found in the
 class documentation below. 
 
-* :mod:`watertap.tools.parallel.parallel_manager`
-* :mod:`watertap.tools.parallel.parallel_manager_factory`
-* :mod:`watertap.tools.parallel.concurrent_futures_parallel_manager`
-* :mod:`watertap.tools.parallel.mpi_parallel_manager`
-* :mod:`watertap.tools.parallel.multiprocessing_parallel_manager`
-* :mod:`watertap.tools.parallel.ray_io_parallel_manager`
-* :mod:`watertap.tools.parallel.single_process_parallel_manager`
+* :mod:`parameter_sweep.parallel.parallel_manager`
+* :mod:`parameter_sweep.parallel.parallel_manager_factory`
+* :mod:`parameter_sweep.parallel.concurrent_futures_parallel_manager`
+* :mod:`parameter_sweep.parallel.mpi_parallel_manager`
+* :mod:`parameter_sweep.parallel.multiprocessing_parallel_manager`
+* :mod:`parameter_sweep.parallel.ray_io_parallel_manager`
+* :mod:`parameter_sweep.parallel.single_process_parallel_manager`
 
 
 Adding Features to the Parallel Manager

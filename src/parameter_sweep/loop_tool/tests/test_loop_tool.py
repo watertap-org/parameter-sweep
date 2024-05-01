@@ -18,7 +18,7 @@ from parameter_sweep.loop_tool.loop_tool import loopTool, get_working_dir
 import yaml
 import h5py
 
-from watertap.tools.parallel.parallel_manager_factory import (
+from parameter_sweep.parallel.parallel_manager_factory import (
     has_mpi_peer_processes,
     get_mpi_comm_process,
 )

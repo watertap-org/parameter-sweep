@@ -12,7 +12,7 @@
 
 import pytest
 
-from watertap.tools.parallel.concurrent_futures_parallel_manager import (
+from parameter_sweep.parallel.concurrent_futures_parallel_manager import (
     ConcurrentFuturesParallelManager,
 )
 

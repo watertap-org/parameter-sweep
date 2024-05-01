@@ -12,7 +12,7 @@
 
 import pytest
 
-from watertap.tools.parallel.ray_io_parallel_manager import (
+from parameter_sweep.parallel.ray_io_parallel_manager import (
     RayIoParallelManager,
 )
 

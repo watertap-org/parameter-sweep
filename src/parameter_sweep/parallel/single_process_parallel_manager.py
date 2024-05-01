@@ -10,8 +10,8 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
-from watertap.tools.parallel.parallel_manager import build_and_execute, ParallelManager
-from watertap.tools.parallel.results import LocalResults
+from parameter_sweep.parallel.parallel_manager import build_and_execute, ParallelManager
+from parameter_sweep.parallel.results import LocalResults
 
 
 class SingleProcessParallelManager(ParallelManager):

@@ -14,21 +14,21 @@ import pytest
 
 from pyomo.common.dependencies import attempt_import
 
-from watertap.tools.parallel.concurrent_futures_parallel_manager import (
+from parameter_sweep.parallel.concurrent_futures_parallel_manager import (
     ConcurrentFuturesParallelManager,
 )
-from watertap.tools.parallel.single_process_parallel_manager import (
+from parameter_sweep.parallel.single_process_parallel_manager import (
     SingleProcessParallelManager,
 )
-from watertap.tools.parallel.multiprocessing_parallel_manager import (
+from parameter_sweep.parallel.multiprocessing_parallel_manager import (
     MultiprocessingParallelManager,
 )
 
-from watertap.tools.parallel.parallel_manager_factory import create_parallel_manager
+from parameter_sweep.parallel.parallel_manager_factory import create_parallel_manager
 
 ray, ray_available = attempt_import("ray", defer_check=False)
 if ray_available:
-    from watertap.tools.parallel.ray_io_parallel_manager import (
+    from parameter_sweep.parallel.ray_io_parallel_manager import (
         RayIoParallelManager,
     )
 

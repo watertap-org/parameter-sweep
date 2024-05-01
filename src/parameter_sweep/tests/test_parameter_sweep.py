@@ -22,7 +22,7 @@ from parameter_sweep import ParameterSweep, parameter_sweep
 from parameter_sweep.parameter_sweep_writer import *
 
 import watertap.tools.MPI as MPI
-from watertap.tools.parallel.parallel_manager_factory import has_mpi_peer_processes
+from parameter_sweep.parallel.parallel_manager_factory import has_mpi_peer_processes
 
 # -----------------------------------------------------------------------------
 

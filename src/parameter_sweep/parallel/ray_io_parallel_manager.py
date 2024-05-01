@@ -13,8 +13,8 @@
 import numpy
 import logging
 
-from watertap.tools.parallel.results import LocalResults
-from watertap.tools.parallel.parallel_manager import (
+from parameter_sweep.parallel.results import LocalResults
+from parameter_sweep.parallel.parallel_manager import (
     parallelActor,
     ParallelManager,
 )

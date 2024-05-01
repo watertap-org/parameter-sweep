@@ -35,7 +35,7 @@ from parameter_sweep.sampling_types import (
     SetMode,
 )
 
-from watertap.tools.parallel.parallel_manager_factory import create_parallel_manager
+from parameter_sweep.parallel.parallel_manager_factory import create_parallel_manager
 
 from parameter_sweep.model_manager import ModelManager
 from parameter_sweep.paramter_sweep_parallel_utils import (

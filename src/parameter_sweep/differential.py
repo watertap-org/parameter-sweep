@@ -18,7 +18,7 @@ from parameter_sweep.parameter_sweep import (
     _ParameterSweepBase,
     ParameterSweep,
 )
-from watertap.tools.parallel.single_process_parallel_manager import (
+from parameter_sweep.parallel.single_process_parallel_manager import (
     SingleProcessParallelManager,
 )
 
