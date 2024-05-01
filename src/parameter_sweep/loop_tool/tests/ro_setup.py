@@ -15,9 +15,9 @@ from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,
 )
-from parameter_sweep.parameter_sweep_reader import ParameterSweepReader
+from parameter_sweep.reader import ParameterSweepReader
 
-from parameter_sweep.parameter_sweep_differential import (
+from parameter_sweep.differential import (
     DifferentialParameterSweep,
 )
 from watertap.core.solvers import get_solver

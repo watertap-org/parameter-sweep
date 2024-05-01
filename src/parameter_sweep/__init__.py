@@ -20,12 +20,12 @@ from parameter_sweep.sampling_types import (
     PredeterminedFixedSample,
     PredeterminedRandomSample,
 )
-from parameter_sweep.parameter_sweep_functions import (
+from parameter_sweep.functions import (
     parameter_sweep,
     recursive_parameter_sweep,
     differential_parameter_sweep,
 )
-from parameter_sweep.parameter_sweep_reader import (
+from parameter_sweep.reader import (
     get_sweep_params_from_yaml,
     set_defaults_from_yaml,
     ParameterSweepReader,
@@ -35,7 +35,7 @@ from parameter_sweep.parameter_sweep import (
     RecursiveParameterSweep,
 )
 
-from parameter_sweep.parameter_sweep_differential import (
+from parameter_sweep.differential import (
     DifferentialParameterSweep,
 )
 

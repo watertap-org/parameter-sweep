@@ -14,7 +14,7 @@ from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,
 )
-from parameter_sweep.parameter_sweep_differential import (
+from parameter_sweep.differential import (
     DifferentialParameterSweep,
 )
 

@@ -17,7 +17,7 @@ import pyomo.environ as pyo
 import copy
 
 from parameter_sweep.parameter_sweep import *
-from parameter_sweep.parameter_sweep_writer import *
+from parameter_sweep.writer import *
 from parameter_sweep.tests.test_parameter_sweep import (
     _get_rank0_path,
     _read_output_h5,

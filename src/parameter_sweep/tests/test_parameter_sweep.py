@@ -19,7 +19,7 @@ from pyomo.environ import value
 
 from parameter_sweep.sampling_types import *
 from parameter_sweep import ParameterSweep, parameter_sweep
-from parameter_sweep.parameter_sweep_writer import *
+from parameter_sweep.writer import *
 
 import watertap.tools.MPI as MPI
 from parameter_sweep.parallel.parallel_manager_factory import has_mpi_peer_processes

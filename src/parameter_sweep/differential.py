@@ -23,7 +23,7 @@ from parameter_sweep.parallel.single_process_parallel_manager import (
 )
 
 from pyomo.common.deprecation import deprecation_warning
-from parameter_sweep.paramter_sweep_parallel_utils import (
+from parameter_sweep.parallel_utils import (
     _ParameterSweepParallelUtils,
     return_none,
 )

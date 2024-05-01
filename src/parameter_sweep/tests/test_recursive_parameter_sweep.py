@@ -23,7 +23,7 @@ from parameter_sweep import (
     RecursiveParameterSweep,
     recursive_parameter_sweep,
 )
-from parameter_sweep.parameter_sweep_writer import *
+from parameter_sweep.writer import *
 from parameter_sweep.tests.test_parameter_sweep import (
     _read_output_h5,
     _get_rank0_path,
