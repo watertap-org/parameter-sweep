@@ -91,3 +91,10 @@ jobs:
         run: |
           pip install pytest  # ensure pytest is installed (should do nothing if already present from requirements-dev.txt)
           pytest --pyargs parameter_sweep
+      - name: Upload coverage report as job artifact
+        if: matrix.coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ matrix.os }}
+          path: coverage.xml
+          if-no-files-found: error
