@@ -13,8 +13,8 @@ import pytest
 import os
 import numpy as np
 
-from watertap.tools.analysis_tools.loop_tool.tests import ro_setup
-from watertap.tools.analysis_tools.loop_tool.loop_tool import loopTool, get_working_dir
+from parameter_sweep.loop_tool.tests import ro_setup
+from parameter_sweep.loop_tool.loop_tool import loopTool, get_working_dir
 import yaml
 import h5py
 

@@ -13,7 +13,7 @@ import pytest
 import os
 import numpy as np
 
-from watertap.tools.analysis_tools.loop_tool import (
+from parameter_sweep.loop_tool import (
     data_merging_tool,
 )
 import h5py

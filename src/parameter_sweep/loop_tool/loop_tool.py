@@ -14,7 +14,7 @@ from watertap.core.solvers import get_solver
 
 from parameter_sweep import ParameterSweep, DifferentialParameterSweep
 from parameter_sweep import ParameterSweepReader
-from watertap.tools.analysis_tools.loop_tool.data_merging_tool import *
+from parameter_sweep.loop_tool.data_merging_tool import *
 from watertap.tools.parallel.parallel_manager_factory import (
     has_mpi_peer_processes,
     get_mpi_comm_process,
