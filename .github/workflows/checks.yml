@@ -85,8 +85,7 @@ jobs:
           idaes get-extensions --verbose
       - if: matrix.coverage
         name: Enable coverage for pytest
-        run: |
-          echo PYTEST_ADDOPTS="$PYTEST_ADDOPTS --cov-report=xml" >> $GITHUB_ENV
+        run: echo PYTEST_ADDOPTS="$PYTEST_ADDOPTS --cov --cov-report=xml" >> $GITHUB_ENV
       - name: Run pytest
         run: |
           pip install pytest  # ensure pytest is installed (should do nothing if already present from requirements-dev.txt)
@@ -108,6 +107,10 @@ jobs:
           src/parameter_sweep/tests/test*parameter_sweep.py \
           src/parameter_sweep/loop_tool/tests/test*loop_tool.py \
           --no-cov
+          # merge into single report
+          coverage combine
+          # convert to XML
+          coverage xml
       - name: Upload coverage report as job artifact
         if: matrix.mpi
         uses: actions/upload-artifact@v4
