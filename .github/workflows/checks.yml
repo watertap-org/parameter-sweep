@@ -1,0 +1,66 @@
+name: Checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTEST_ADDOPTS: --color=yes
+  PIP_PROGRESS_BAR: "off"
+
+jobs:
+
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          version: "~= 24.3.0"
+
+  pytest:
+    name: pytest (${{ matrix.os }}/${{ matrix.python-version }}/${{ matrix.install-mode }})
+    runs-on: ${{ matrix.os-version }}
+    needs: [linting]
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+        os:
+          - linux
+          - win64
+        install-mode:
+          - dev
+          # - standard
+        include:
+          - os: linux
+            os-version: ubuntu-22.04
+          - os: win64
+            os-version: windows-2022
+    steps:
+      - if: matrix.install-mode == 'dev'
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - if: matrix.install-mode == 'dev'
+        name: Install (dev)
+        run: |
+          pip install -r requirements-dev.txt
+      - if: matrix.install-mode == 'standard'
+        name: Install (standard)
+        run: |
+          pip install "git+${{ format('{0}/{1}@{2}', github.server_url, github.repository, github.ref) }}"
+      - name: Set up IDAES solvers
+        run: |
+          idaes get-extensions --verbose
+      - name: Run pytest
+        run: |
+          pip install pytest  # ensure pytest is installed (should do nothing if already present from requirements-dev.txt)
+          pytest --pyargs parameter_sweep
