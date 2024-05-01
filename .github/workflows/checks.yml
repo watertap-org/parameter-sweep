@@ -101,7 +101,7 @@ jobs:
         name: Collect coverage for MPI-using code
         run: |
           conda install --quiet --yes mpi4py
-          mpiexec -n 2 \
+          mpiexec -n 2 --use-hwthread-cpus \
           coverage run --parallel-mode \
           -m mpi4py -m pytest \
           src/parameter_sweep/tests/test*parameter_sweep.py \
