@@ -43,6 +43,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        install-mode:
+          - dev
+          - standard
         python-version:
           - "3.8"
           - "3.9"
@@ -51,9 +54,6 @@ jobs:
         os:
           - linux
           - win64
-        install-mode:
-          - dev
-          # - standard
         include:
           - os: linux
             os-version: ubuntu-22.04
