@@ -10,8 +10,6 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
-from watertap.core.solvers import get_solver
-
 from parameter_sweep import ParameterSweep, DifferentialParameterSweep
 from parameter_sweep import ParameterSweepReader
 from parameter_sweep.loop_tool.data_merging_tool import *
@@ -19,6 +17,7 @@ from parameter_sweep.parallel.parallel_manager_factory import (
     has_mpi_peer_processes,
     get_mpi_comm_process,
 )
+from parameter_sweep._compat import get_solver
 import copy
 import os
 import h5py
