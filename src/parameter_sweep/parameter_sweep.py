@@ -16,7 +16,6 @@ import copy
 import time
 
 from abc import abstractmethod, ABC
-from watertap.core.solvers import get_solver
 
 from idaes.core.surrogate.pysmo import sampling
 from pyomo.common.deprecation import deprecation_warning
@@ -42,6 +41,7 @@ from parameter_sweep.parallel_utils import (
     _ParameterSweepParallelUtils,
     return_none,
 )
+from parameter_sweep._compat import get_solver
 
 
 def _default_optimize(model, options=None, tee=False):
