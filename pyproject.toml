@@ -16,7 +16,8 @@ dependencies = [
     "pyyaml",
     # both idaes-pse and watertap should be removed from core dependencies ASAP
     "idaes-pse",  # idaes.core.surrogate.pysmo.sampling
-    "watertap >= 1.0.dev0",  # watertap.core.solvers.get_solver()
+    "watertap",   # watertap.core.solvers.get_solver() (after watertap-org/watertap#1353)
+                  # or imported to apply WaterTAP solver settings (0.12.0 or earlier)
 ]
 [project.optional-dependencies]
 ray = [
@@ -28,6 +29,7 @@ mpi = [
 testing = [
     "pytest >= 8",
     "idaes-pse",  # for IDAES solvers
+    "watertap",   # loop_tool tests
     "requests",  # for src/parameter_sweep/tests/test_parameter_sweep.py
 ]
 [tool.setuptools_scm]
