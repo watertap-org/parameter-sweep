@@ -30,7 +30,7 @@ from parameter_sweep.tests.test_parameter_sweep import (
     _assert_dictionary_correctness,
 )
 
-import watertap.tools.MPI as MPI
+from parameter_sweep.parallel import MPI
 
 # -----------------------------------------------------------------------------
 
