@@ -310,20 +310,22 @@ class _ParameterSweepBase(ABC):
                 outputs[output_name] = exprs[output_name]
 
     def _publish_updates(self, iteration, solve_status, solve_time):
+        if not self.config.publish_progress:
+            return
+
         if not requests_available:
             raise ImportError(
                 "requests (parameter_sweep optional dependency) not installed"
             )
 
-        if self.config.publish_progress:
-            publish_dict = {
-                "worker_number": self.parallel_manager.get_rank(),
-                "iteration": iteration,
-                "solve_status": solve_status,
-                "solve_time": solve_time,
-            }
+        publish_dict = {
+            "worker_number": self.parallel_manager.get_rank(),
+            "iteration": iteration,
+            "solve_status": solve_status,
+            "solve_time": solve_time,
+        }
 
-            return requests.put(self.config.publish_address, data=publish_dict)
+        return requests.put(self.config.publish_address, data=publish_dict)
 
     def _create_global_combo_array(self, d, sampling_type):
         num_var_params = len(d)
