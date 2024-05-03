@@ -314,7 +314,7 @@ class _ParameterSweepBase(ABC):
             return
 
         if not requests_available:
-            raise ImportError(
+            raise RuntimeError(
                 "requests (parameter_sweep optional dependency) not installed"
             )
 
