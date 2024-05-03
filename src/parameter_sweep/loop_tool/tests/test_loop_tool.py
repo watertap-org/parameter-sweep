@@ -12,15 +12,18 @@
 import pytest
 import os
 import numpy as np
-
-from parameter_sweep.loop_tool.tests import ro_setup
-from parameter_sweep.loop_tool.loop_tool import loopTool, get_working_dir
-import yaml
 import h5py
+import yaml
 
+from parameter_sweep.loop_tool.loop_tool import loopTool, get_working_dir
 from parameter_sweep.parallel.parallel_manager_factory import (
     has_mpi_peer_processes,
     get_mpi_comm_process,
+)
+
+ro_setup = pytest.importorskip(
+    "parameter_sweep.loop_tool.tests.ro_setup",
+    reason="ro_setup dependencies (typically watertap) not available",
 )
 
 __author__ = "Alexander V. Dudchenko (SLAC)"
