@@ -15,9 +15,7 @@ dependencies = [
     "h5py",
     "pyyaml",
     # both idaes-pse and watertap should be removed from core dependencies ASAP
-    "idaes-pse",  # idaes.core.surrogate.pysmo.sampling
-    "watertap",   # watertap.core.solvers.get_solver() (after watertap-org/watertap#1353)
-                  # or imported to apply WaterTAP solver settings (0.12.0 or earlier)
+    "idaes-pse",  # idaes.core.solvers.get_solver(), idaes.core.surrogate.pysmo.sampling
 ]
 [project.optional-dependencies]
 ray = [
