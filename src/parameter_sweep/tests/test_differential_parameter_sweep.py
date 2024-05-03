@@ -35,7 +35,7 @@ from parameter_sweep.tests.test_parameter_sweep import (
     build_model,
     build_sweep_params_for_tps,
 )
-import watertap.tools.MPI as MPI
+from parameter_sweep.parallel import MPI
 
 from parameter_sweep.model_manager import ModelManager
 

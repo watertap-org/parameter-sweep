@@ -21,7 +21,10 @@ from parameter_sweep.parallel.parallel_manager_factory import (
     get_mpi_comm_process,
 )
 
-ro_setup = pytest.importorskip("parameter_sweep.loop_tool.tests.ro_setup", reason="ro_setup dependencies (typically watertap) not available")
+ro_setup = pytest.importorskip(
+    "parameter_sweep.loop_tool.tests.ro_setup",
+    reason="ro_setup dependencies (typically watertap) not available",
+)
 
 __author__ = "Alexander V. Dudchenko (SLAC)"
 
