@@ -26,7 +26,7 @@ from parameter_sweep.parallel.multiprocessing_parallel_manager import (
 
 from parameter_sweep.parallel.parallel_manager_factory import create_parallel_manager
 
-ray, ray_available = attempt_import("ray", defer_check=False)
+ray, ray_available = attempt_import("ray", defer_import=False)
 if ray_available:
     from parameter_sweep.parallel.ray_io_parallel_manager import (
         RayIoParallelManager,
