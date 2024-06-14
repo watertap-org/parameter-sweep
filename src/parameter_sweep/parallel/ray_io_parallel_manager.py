@@ -20,7 +20,7 @@ from parameter_sweep.parallel.parallel_manager import (
 )
 from pyomo.common.dependencies import attempt_import
 
-ray, ray_available = attempt_import("ray", defer_check=False)
+ray, ray_available = attempt_import("ray", defer_import=False)
 import os
 import platform
 

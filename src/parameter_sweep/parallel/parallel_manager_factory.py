@@ -23,8 +23,8 @@ from parameter_sweep.parallel.multiprocessing_parallel_manager import (
 )
 
 
-MPI, mpi4py_available = attempt_import("mpi4py.MPI", defer_check=False)
-ray, ray_avaialble = attempt_import("ray", defer_check=False)
+MPI, mpi4py_available = attempt_import("mpi4py.MPI", defer_import=False)
+ray, ray_avaialble = attempt_import("ray", defer_import=False)
 if ray_avaialble:
     from parameter_sweep.parallel.ray_io_parallel_manager import (
         RayIoParallelManager,

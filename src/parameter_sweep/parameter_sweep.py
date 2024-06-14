@@ -21,8 +21,8 @@ from idaes.core.surrogate.pysmo import sampling
 from pyomo.common.deprecation import deprecation_warning
 from pyomo.common.config import ConfigValue
 from pyomo.common.modeling import unique_component_name
-from pyomo.core.base import _VarData, _ExpressionData
-from pyomo.core.base.param import _ParamData
+from pyomo.core.base import VarData, NamedExpressionData
+from pyomo.core.base.param import ParamData
 from pyomo.common.dependencies import attempt_import
 
 requests, requests_available = attempt_import("requests")
@@ -304,7 +304,7 @@ class _ParameterSweepBase(ABC):
             unique_component_name(model, "_parameter_sweep_expressions"), exprs
         )
         for output_name, _pyo_obj in outputs.items():
-            if not isinstance(_pyo_obj, (_VarData, _ExpressionData, _ParamData)):
+            if not isinstance(_pyo_obj, (VarData, NamedExpressionData, ParamData)):
                 # Add this object as an expression and assign a name
                 exprs[output_name] = _pyo_obj
                 outputs[output_name] = exprs[output_name]
