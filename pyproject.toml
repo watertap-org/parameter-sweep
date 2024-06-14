@@ -31,5 +31,6 @@ testing = [
     "requests",  # for src/parameter_sweep/tests/test_parameter_sweep.py
 ]
 [tool.setuptools_scm]
-version_scheme = "no-guess-dev"
+# https://setuptools-scm.readthedocs.io/en/v8.1.0/extending/
+version_scheme = "only-version"
 local_scheme = "node-and-date"
