@@ -10,7 +10,7 @@ name = "parameter-sweep"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
-    "pyomo",
+    "pyomo>=6.7.3",  # see watertap-org/parameter-sweep#10
     "numpy",
     "h5py",
     "pyyaml",
