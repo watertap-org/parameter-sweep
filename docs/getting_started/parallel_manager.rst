@@ -1,10 +1,5 @@
 Parallel Manager
-====================
-
-.. index::
-    pair: parameter_sweep.parallel.parallel_manager;parallel_manager
-
-.. currentmodule:: parameter_sweep.parallel.parallel_manager
+================
 
 Overview
 --------
@@ -66,11 +61,11 @@ following statement.
 
 The above code return 1 of 5 parallel manager classes. There are currently 5 parallel manager classes:
 
-    #. ``SingleProcessParallelManager`` : To enable serial implementation
-    #. ``MPIParallelManager`` : For MPI
-    #. ``ConcurrentFuturesParallelManager`` : For python concurrent futures
-    #. ``MultiprocessingParallelManager`` : For more advanced python multiprocessing
-    #. ``RayIoParallelManager`` : For using Ray
+    #. :class:`SingleProcessParallelManager` : To enable serial implementation
+    #. :class:`MPIParallelManager` : For MPI
+    #. :class:`ConcurrentFuturesParallelManager` : For python concurrent futures
+    #. :class:`MultiprocessingParallelManager` : For more advanced python multiprocessing
+    #. :class:`RayIoParallelManager` : For using Ray
 
 Alternatively, the user can specify the parameter sweep class directly, for example
 
