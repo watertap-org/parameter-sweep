@@ -134,8 +134,8 @@ def parameter_sweep(
     Returns:
 
         save_data : A list were the first N columns are the values of the parameters passed
-                    by ``sweep_params`` and the remaining columns are the values of the
-                    simulation identified by the ``outputs`` argument.
+        by ``sweep_params`` and the remaining columns are the values of the
+        simulation identified by the ``outputs`` argument.
     """
 
     kwargs = {}
@@ -280,8 +280,8 @@ def recursive_parameter_sweep(
     Returns:
 
         save_data : A list were the first N columns are the values of the parameters passed
-                    by ``sweep_params`` and the remaining columns are the values of the
-                    simulation identified by the ``outputs`` argument.
+        by ``sweep_params`` and the remaining columns are the values of the
+        simulation identified by the ``outputs`` argument.
     """
 
     kwargs = {}
@@ -450,8 +450,8 @@ def differential_parameter_sweep(
     Returns:
 
         save_data : A list were the first N columns are the values of the parameters passed
-                    by ``sweep_params`` and the remaining columns are the values of the
-                    simulation identified by the ``outputs`` argument.
+        by ``sweep_params`` and the remaining columns are the values of the
+        simulation identified by the ``outputs`` argument.
     """
 
     kwargs = {}
