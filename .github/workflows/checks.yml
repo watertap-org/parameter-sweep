@@ -134,7 +134,7 @@ jobs:
           pattern: coverage-report-*
       - name: Upload coverage report to Codecov (tokenless)
         uses: codecov/codecov-action@v4
-        if: ${{ !secrets.CODECOV_TOKEN }}
+        if: ${{ ! secrets.CODECOV_TOKEN }}
         with:
           fail_ci_if_error: true
           verbose: true
