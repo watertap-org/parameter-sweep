@@ -142,3 +142,15 @@ jobs:
           # but does require token for other workflows e.g. merge to `main`
           # see https://github.com/codecov/codecov-action/issues/1274#issuecomment-1934437359
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  build-docs:
+    name: Build docs (Sphinx)
+    needs: [code-formatting]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements-dev.txt
+      - run: make -C docs html
