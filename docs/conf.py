@@ -48,6 +48,7 @@ autoapi_ignore = [
 suppress_warnings += ["autoapi.python_import_resolution"]
 
 intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
     "pyomo": ("https://pyomo.readthedocs.org/en/stable", None),
     "numpy": ("https://numpy.org/doc/1.26", None),
 }

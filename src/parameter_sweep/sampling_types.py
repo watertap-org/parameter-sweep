@@ -19,12 +19,14 @@ from abc import abstractmethod, ABC
 
 
 class SamplingType(Enum):
+    "Available sampling types."
     FIXED = auto()
     RANDOM = auto()
     RANDOM_LHS = auto()
 
 
 class SetMode(Enum):
+    "Available set modes."
     FIX_VALUE = auto()
     SET_LB = auto()
     SET_UB = auto()
@@ -32,6 +34,8 @@ class SetMode(Enum):
 
 
 class _Sample(ABC):
+    "Base class for Sample classes."
+
     def __init__(self, pyomo_object, *args, **kwargs):
         # Check for indexed with single value
         if pyomo_object.is_indexed() and len(pyomo_object) == 1:
@@ -75,14 +79,18 @@ class _Sample(ABC):
 
 
 class RandomSample(_Sample):
+    "Base class for random sampling."
     sampling_type = SamplingType.RANDOM
 
 
 class FixedSample(_Sample):
+    "Base class for fixed sampling."
     sampling_type = SamplingType.FIXED
 
 
 class LinearSample(FixedSample):
+    "Class for linear sampling using :func:`numpy.linspace`."
+
     def sample(self):
         return np.linspace(self.lower_limit, self.upper_limit, self.num_samples)
 
@@ -93,6 +101,8 @@ class LinearSample(FixedSample):
 
 
 class GeomSample(FixedSample):
+    "Class for geometric sampling using :func:`numpy.geomspace`."
+
     def sample(self):
         return np.geomspace(
             self.lower_limit, self.upper_limit, self.num_samples, endpoint=True
@@ -105,6 +115,8 @@ class GeomSample(FixedSample):
 
 
 class ReverseGeomSample(FixedSample):
+    "Class for reverse geometric sampling using :func:`numpy.geomspace`."
+
     def sample(self):
         return (
             (self.upper_limit + self.lower_limit)
@@ -137,6 +149,8 @@ class PredeterminedFixedSample(FixedSample):
 
 
 class UniformSample(RandomSample):
+    "Class for random sampling from a uniform distribution using :func:`numpy.random.uniform`."
+
     def sample(self):
         return np.random.uniform(self.lower_limit, self.upper_limit, self.num_samples)
 
@@ -147,6 +161,8 @@ class UniformSample(RandomSample):
 
 
 class NormalSample(RandomSample):
+    "Class for random sampling from a normal distribution using :func:`numpy.random.normal`."
+
     def sample(self):
         return np.random.normal(self.mean, self.sd, self.num_samples)
 
@@ -174,6 +190,7 @@ class PredeterminedRandomSample(RandomSample):
 
 
 class LatinHypercubeSample(_Sample):
+    "Class for Latin Hypercube sampling."
     sampling_type = SamplingType.RANDOM_LHS
 
     def sample(self):

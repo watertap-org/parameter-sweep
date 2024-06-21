@@ -14,6 +14,7 @@ from abc import abstractmethod, ABC
 
 
 class ParallelManager(ABC):
+    "Abstract Base Class for Parallel Manager implementations."
     ROOT_PROCESS_RANK = 0
 
     @abstractmethod

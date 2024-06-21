@@ -19,6 +19,8 @@ from parameter_sweep.parallel.parallel_manager import build_and_execute, Paralle
 
 
 class ConcurrentFuturesParallelManager(ParallelManager):
+    "Parallel manager class for multiprocessing using :mod:`concurrent.futures`."
+
     def __init__(self, number_of_subprocesses=1, **kwargs):
         self.max_number_of_subprocesses = number_of_subprocesses
 

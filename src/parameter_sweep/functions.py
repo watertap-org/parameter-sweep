@@ -49,8 +49,8 @@ def parameter_sweep(
 
     Arguments:
 
-        build_model : A function that can be called to build a Pyomo ConcreteModel, OR
-                      (deprecated) a Pyomo ConcreteModel containing a watertap flowsheet.
+        build_model : A function that can be called to build a Pyomo :class:`~pyomo.environ.ConcreteModel`, OR
+                      (deprecated) a Pyomo :class:`~pyomo.environ.ConcreteModel` containing a watertap flowsheet.
 
         build_sweep_params: A function that can be called to build a dictionary containing the values to vary
                             with the format ``sweep_params['Short/Pretty-print Name'] =
@@ -134,8 +134,8 @@ def parameter_sweep(
     Returns:
 
         save_data : A list were the first N columns are the values of the parameters passed
-                    by ``sweep_params`` and the remaining columns are the values of the
-                    simulation identified by the ``outputs`` argument.
+        by ``sweep_params`` and the remaining columns are the values of the
+        simulation identified by the ``outputs`` argument.
     """
 
     kwargs = {}
@@ -198,12 +198,12 @@ def recursive_parameter_sweep(
     number_of_subprocesses=None,
 ):
     """
-    This function is similar to the `parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
+    This function is similar to the :func:`~parameter_sweep.functions.parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
     If provided, writes single CSV file to ``results_file`` with all inputs and resulting outputs.
 
     Arguments:
 
-        model : A Pyomo ConcreteModel containing a watertap flowsheet, for best
+        model : A Pyomo :class:`~pyomo.environ.ConcreteModel` containing a watertap flowsheet, for best
                 results it should be initialized before being passed to this
                 function.
 
@@ -280,8 +280,8 @@ def recursive_parameter_sweep(
     Returns:
 
         save_data : A list were the first N columns are the values of the parameters passed
-                    by ``sweep_params`` and the remaining columns are the values of the
-                    simulation identified by the ``outputs`` argument.
+        by ``sweep_params`` and the remaining columns are the values of the
+        simulation identified by the ``outputs`` argument.
     """
 
     kwargs = {}
@@ -342,12 +342,12 @@ def differential_parameter_sweep(
     guarantee_solves=False,
 ):
     """
-    This function is similar to the `parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
+    This function is similar to the :func:`~parameter_sweep.functions.parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
     If provided, writes single CSV file to ``results_file`` with all inputs and resulting outputs.
 
     Arguments:
 
-        model : A Pyomo ConcreteModel containing a watertap flowsheet, for best
+        model : A Pyomo :class:`~pyomo.environ.ConcreteModel` containing a watertap flowsheet, for best
                 results it should be initialized before being passed to this
                 function.
 
@@ -363,7 +363,7 @@ def differential_parameter_sweep(
             The number of samples for each differential sweep is specified while initializing the DifferentialParameterSweep object wsing the keyword `num_diff_samples`
             e.g.
 
-        .. highlight::
+        .. code-block::
 
             {"fs.a": {"diff_mode": "sum", \
                       "diff_sample_type": NormalSample, \
@@ -378,7 +378,7 @@ def differential_parameter_sweep(
                       "diff_sample_type": GeomSample, \
                       "relative_lb": 0.01, \
                       "relative_ub": 10.0, \
-                      "pyomo_object": m.fs.input["c"]}} \
+                      "pyomo_object": m.fs.input["c"]}}
 
         outputs (optional) : An optional dictionary containing "short names" as keys and and Pyomo objects
                   on ``model`` whose values to report as values. E.g.,
@@ -450,8 +450,8 @@ def differential_parameter_sweep(
     Returns:
 
         save_data : A list were the first N columns are the values of the parameters passed
-                    by ``sweep_params`` and the remaining columns are the values of the
-                    simulation identified by the ``outputs`` argument.
+        by ``sweep_params`` and the remaining columns are the values of the
+        simulation identified by the ``outputs`` argument.
     """
 
     kwargs = {}

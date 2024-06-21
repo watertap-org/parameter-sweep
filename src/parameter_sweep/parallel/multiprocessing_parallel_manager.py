@@ -27,6 +27,8 @@ _logger = logging.getLogger(__name__)
 
 
 class MultiprocessingParallelManager(ParallelManager):
+    "Parallel manager class for multiprocessing using :mod:`multiprocessing`."
+
     def __init__(
         self,
         number_of_subprocesses=1,

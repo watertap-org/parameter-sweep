@@ -17,6 +17,8 @@ from parameter_sweep.parallel.parallel_manager import build_and_execute, Paralle
 
 
 class MPIParallelManager(ParallelManager):
+    "Parallel manager class for multiprocessing using MPI."
+
     def __init__(self, MPI, **kwargs):
         self.MPI = MPI
         self.comm = self.MPI.COMM_WORLD
