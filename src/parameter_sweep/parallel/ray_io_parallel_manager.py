@@ -31,6 +31,8 @@ _log = logging.getLogger(__name__)
 
 
 class RayIoParallelManager(ParallelManager):
+    "Parallel manager class for Ray."
+
     def __init__(self, number_of_subprocesses=1, **kwargs):
         self.max_number_of_subprocesses = number_of_subprocesses
 

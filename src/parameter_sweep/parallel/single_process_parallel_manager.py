@@ -15,6 +15,8 @@ from parameter_sweep.parallel.results import LocalResults
 
 
 class SingleProcessParallelManager(ParallelManager):
+    "Parallel manager class for single-process execution."
+
     def __init__(self, **kwargs):
         self.results = None
 
