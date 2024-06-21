@@ -132,19 +132,15 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: coverage-report-*
-      - name: Upload coverage report to Codecov (tokenless)
-        uses: codecov/codecov-action@v4
-        if: ${{ ! secrets.CODECOV_TOKEN }}
-        with:
-          fail_ci_if_error: true
-          verbose: true
       - name: Upload coverage report to Codecov (token)
         uses: codecov/codecov-action@v4
-        if: secrets.CODECOV_TOKEN
         with:
           fail_ci_if_error: true
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
+          # downgrading after v0.7.0 broke tokenless upload
+          # see codecov/codecov-action#1487
+          version: v0.6.0
 
   build-docs:
     name: Build docs (Sphinx)
