@@ -49,8 +49,8 @@ def parameter_sweep(
 
     Arguments:
 
-        build_model : A function that can be called to build a Pyomo ConcreteModel, OR
-                      (deprecated) a Pyomo ConcreteModel containing a watertap flowsheet.
+        build_model : A function that can be called to build a Pyomo :class:`~pyomo.environ.ConcreteModel`, OR
+                      (deprecated) a Pyomo :class:`~pyomo.environ.ConcreteModel` containing a watertap flowsheet.
 
         build_sweep_params: A function that can be called to build a dictionary containing the values to vary
                             with the format ``sweep_params['Short/Pretty-print Name'] =
@@ -198,12 +198,12 @@ def recursive_parameter_sweep(
     number_of_subprocesses=None,
 ):
     """
-    This function is similar to the `parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
+    This function is similar to the :func:`~parameter_sweep.functions.parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
     If provided, writes single CSV file to ``results_file`` with all inputs and resulting outputs.
 
     Arguments:
 
-        model : A Pyomo ConcreteModel containing a watertap flowsheet, for best
+        model : A Pyomo :class:`~pyomo.environ.ConcreteModel` containing a watertap flowsheet, for best
                 results it should be initialized before being passed to this
                 function.
 
@@ -342,12 +342,12 @@ def differential_parameter_sweep(
     guarantee_solves=False,
 ):
     """
-    This function is similar to the `parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
+    This function is similar to the :func:`~parameter_sweep.functions.parameter_sweep` function for exploring the parameter space while guranteeing a required number of solves.
     If provided, writes single CSV file to ``results_file`` with all inputs and resulting outputs.
 
     Arguments:
 
-        model : A Pyomo ConcreteModel containing a watertap flowsheet, for best
+        model : A Pyomo :class:`~pyomo.environ.ConcreteModel` containing a watertap flowsheet, for best
                 results it should be initialized before being passed to this
                 function.
 
