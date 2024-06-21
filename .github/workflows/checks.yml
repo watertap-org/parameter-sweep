@@ -132,15 +132,18 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: coverage-report-*
-      - name: Upload coverage report to Codecov
+      - name: Upload coverage report to Codecov (tokenless)
         uses: codecov/codecov-action@v4
+        if: "${{ !secrets.CODECOV_TOKEN }}"
         with:
           fail_ci_if_error: true
           verbose: true
-          # NOTE: secrets are not available for pull_request workflows
-          # However, as of 2024-02-10, Codecov is still allowing tokenless upload from PRs
-          # but does require token for other workflows e.g. merge to `main`
-          # see https://github.com/codecov/codecov-action/issues/1274#issuecomment-1934437359
+      - name: Upload coverage report to Codecov (token)
+        uses: codecov/codecov-action@v4
+        if: secrets.CODECOV_TOKEN
+        with:
+          fail_ci_if_error: true
+          verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
   build-docs:
