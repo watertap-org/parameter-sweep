@@ -2,7 +2,8 @@ black==24.3.0
 pytest-cov
 coverage
 
-Sphinx==7.3.7
+Sphinx==7.1.2 ; python_version < '3.9'
+Sphinx==7.3.7 ; python_version >= '3.9'
 sphinx-autoapi==3.0.0
 sphinx-rtd-theme==2.0.0
 
