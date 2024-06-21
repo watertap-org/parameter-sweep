@@ -363,7 +363,7 @@ def differential_parameter_sweep(
             The number of samples for each differential sweep is specified while initializing the DifferentialParameterSweep object wsing the keyword `num_diff_samples`
             e.g.
 
-        .. highlight::
+        .. code-block::
 
             {"fs.a": {"diff_mode": "sum", \
                       "diff_sample_type": NormalSample, \
@@ -378,7 +378,7 @@ def differential_parameter_sweep(
                       "diff_sample_type": GeomSample, \
                       "relative_lb": 0.01, \
                       "relative_ub": 10.0, \
-                      "pyomo_object": m.fs.input["c"]}} \
+                      "pyomo_object": m.fs.input["c"]}}
 
         outputs (optional) : An optional dictionary containing "short names" as keys and and Pyomo objects
                   on ``model`` whose values to report as values. E.g.,
