@@ -74,6 +74,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
+          miniforge-version: latest
           python-version: ${{ matrix.python-version }}
           activate-environment: ${{ matrix.install-mode == 'dev' && 'parameter-sweep-dev' || 'parameter-sweep' }}
       - if: matrix.install-mode == 'dev'
