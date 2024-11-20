@@ -77,7 +77,11 @@ jobs:
           activate-environment: ${{ matrix.install-mode == 'dev' && 'parameter-sweep-dev' || 'parameter-sweep' }}
       - if: matrix.install-mode == 'dev'
         name: Install (dev)
+        env:
+          SETUPTOOLS_SCM_DEBUG: "1"
         run: |
+          pip install build
+          python -c "import build.util; print(build.util.project_wheel_metadata('.')['Version'])"
           pip install -r requirements-dev.txt
       - if: matrix.install-mode == 'standard'
         name: Install (standard)
