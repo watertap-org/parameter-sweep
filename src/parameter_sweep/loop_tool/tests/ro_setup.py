@@ -10,7 +10,7 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
-import watertap.examples.flowsheets.RO_with_energy_recovery.RO_with_energy_recovery as ro_erd
+import watertap.flowsheets.RO_with_energy_recovery.RO_with_energy_recovery as ro_erd
 from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,

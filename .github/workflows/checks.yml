@@ -48,7 +48,6 @@ jobs:
           - dev
           - standard
         python-version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
@@ -70,14 +69,21 @@ jobs:
     steps:
       - if: matrix.install-mode == 'dev'
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
+          miniforge-version: latest
           python-version: ${{ matrix.python-version }}
           activate-environment: ${{ matrix.install-mode == 'dev' && 'parameter-sweep-dev' || 'parameter-sweep' }}
       - if: matrix.install-mode == 'dev'
         name: Install (dev)
+        env:
+          SETUPTOOLS_SCM_DEBUG: "1"
         run: |
+          pip install build
+          python -c "import build.util; print(build.util.project_wheel_metadata('.')['Version'])"
           pip install -r requirements-dev.txt
       - if: matrix.install-mode == 'standard'
         name: Install (standard)
@@ -148,8 +154,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
       - run: pip install -r requirements-dev.txt
       - run: make -C docs html
