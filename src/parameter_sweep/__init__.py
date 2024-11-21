@@ -39,6 +39,8 @@ from parameter_sweep.differential import (
     DifferentialParameterSweep,
 )
 
+from parameter_sweep.loop_tool import loopTool
+
 # TODO: should this be removed?
 import numpy as _np
 
