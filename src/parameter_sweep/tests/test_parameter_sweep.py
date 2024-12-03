@@ -1231,7 +1231,6 @@ class TestParameterSweep:
                 build_outputs=None,
             )
 
-
     @pytest.mark.component
     def test_parameter_sweep_recover(self, model, tmp_path):
         comm = MPI.COMM_WORLD
