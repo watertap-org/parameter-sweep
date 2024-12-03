@@ -1845,7 +1845,7 @@ class TestParameterSweep:
             _assert_h5_csv_agreement(csv_results_file_name, read_dict)
 
     @pytest.mark.component
-    def test_parameter_sweep_bad_sweep_update_before_initialize(self, model, tmp_path):
+    def test_parameter_sweep_bad_sweep_update_before_initialize(self):
         ps = ParameterSweep(
             optimize_function=_optimization,
             initialize_before_sweep=True,
@@ -1853,36 +1853,20 @@ class TestParameterSweep:
             initialize_kwargs=None,
             update_sweep_params_before_init=True,
         )
-        m = model
-        m.fs.slack_penalty = 1000.0
-        m.fs.slack.setub(0)
-
-        A = m.fs.input["a"]
-        B = m.fs.input["b"]
-        sweep_params = {A.name: (A, 0.1, 0.9, 3), B.name: (B, 0.0, 0.5, 3)}
 
         with pytest.raises(ValueError):
-            # Call the parameter_sweep function
             ps.parameter_sweep(
-                m,
-                sweep_params,
+                build_model_for_tps,
+                build_sweep_params_for_tps,
                 build_outputs=None,
             )
 
     @pytest.mark.component
-    def test_parameter_sweep_bad_optimization_call(self, model, tmp_path):
+    def test_parameter_sweep_bad_optimization_call(self):
         ps = ParameterSweep(
             optimize_function=_optimization,
             optimize_kwargs={"foo": "bar"},
         )
-
-        m = model
-        m.fs.slack_penalty = 1000.0
-        m.fs.slack.setub(0)
-
-        A = m.fs.input["a"]
-        B = m.fs.input["b"]
-        sweep_params = {A.name: (A, 0.1, 0.9, 3), B.name: (B, 0.0, 0.5, 3)}
 
         with pytest.raises(TypeError):
             # Call the parameter_sweep function
@@ -1893,7 +1877,7 @@ class TestParameterSweep:
             )
 
     @pytest.mark.component
-    def test_parameter_sweep_bad_reinitialize_call(self, model, tmp_path):
+    def test_parameter_sweep_bad_reinitialize_call(self, model):
         def reinit(a=42):
             pass
 
@@ -1904,19 +1888,11 @@ class TestParameterSweep:
             initialize_kwargs={"foo": "bar"},
         )
 
-        m = model
-        m.fs.slack_penalty = 1000.0
-        m.fs.slack.setub(0)
-
-        A = m.fs.input["a"]
-        B = m.fs.input["b"]
-        sweep_params = {A.name: (A, 0.1, 0.9, 3), B.name: (B, 0.0, 0.5, 3)}
-
         with pytest.raises(TypeError):
             # Call the parameter_sweep function
             ps.parameter_sweep(
-                m,
-                sweep_params,
+                build_model_for_tps,
+                build_sweep_params_for_tps,
                 build_outputs=None,
             )
 
