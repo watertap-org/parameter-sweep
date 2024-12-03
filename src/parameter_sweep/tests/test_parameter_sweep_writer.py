@@ -15,9 +15,10 @@ import os
 import numpy as np
 import pyomo.environ as pyo
 import copy
+import h5py
 
-from parameter_sweep.parameter_sweep import *
-from parameter_sweep.writer import *
+from parameter_sweep import ParameterSweep
+from parameter_sweep.writer import ParameterSweepWriter
 from parameter_sweep.tests.test_parameter_sweep import (
     _get_rank0_path,
     _read_output_h5,

@@ -208,7 +208,7 @@ def test_create_differential_sweep_params_percentile(model):
 
 
 @pytest.mark.component
-def test_bad_differential_sweep_specs(model, tmp_path):
+def test_bad_differential_sweep_specs(model):
     m = model
     differential_sweep_specs = {
         "fs.b": {
