@@ -657,11 +657,6 @@ class TestParameterSweep:
             "input_a": (m.fs.input["a"], 0.1, 0.9, 3),
             "input_b": (m.fs.input["b"], 0.0, 0.5, 3),
         }
-        # outputs = {
-        #     "output_c": m.fs.output["c"],
-        #     "output_d": m.fs.output["d"],
-        #     "performance": m.fs.performance,
-        # }
 
         sweep_params, sampling_type = ps._process_sweep_params(sweep_params)
         values = ps._build_combinations(sweep_params, sampling_type, None)
@@ -760,11 +755,6 @@ class TestParameterSweep:
         sweep_params = {
             "input_a": NormalSample(m.fs.input["a"], 0.1, 0.9, global_num_cases),
             "input_b": NormalSample(m.fs.input["b"], 0.0, 0.5, global_num_cases),
-        }
-        outputs = {
-            "output_c": m.fs.output["c"],
-            "output_d": m.fs.output["d"],
-            "performance": m.fs.performance,
         }
 
         sweep_params, sampling_type = ps._process_sweep_params(sweep_params)
@@ -975,7 +965,7 @@ class TestParameterSweep:
 
     @pytest.mark.requires_idaes_solver
     @pytest.mark.component
-    def test_parameter_sweep_optimize(self, model, tmp_path):
+    def test_parameter_sweep_optimize(self, tmp_path):
         comm = MPI.COMM_WORLD
 
         tmp_path = _get_rank0_path(comm, tmp_path)
@@ -1106,7 +1096,7 @@ class TestParameterSweep:
             _assert_h5_csv_agreement(csv_results_file_name, read_dict)
 
     @pytest.mark.component
-    def test_parameter_sweep_optimize_with_added_var(self, model, tmp_path):
+    def test_parameter_sweep_optimize_with_added_var(self, tmp_path):
         # this will run a solve function that adds a variable but only in some
         # of the solves.
         """THIS TEST IS DESIGNED FOR 2 Parallel workers!!!!!!"""
@@ -1205,7 +1195,7 @@ class TestParameterSweep:
             _assert_dictionary_correctness(truth_dict, read_dict, rtol=1e-2)
 
     @pytest.mark.component
-    def test_parameter_sweep_bad_initialize_call_2(self, model, tmp_path):
+    def test_parameter_sweep_bad_initialize_call_2(self, tmp_path):
         comm = MPI.COMM_WORLD
 
         tmp_path = _get_rank0_path(comm, tmp_path)
@@ -1232,7 +1222,7 @@ class TestParameterSweep:
             )
 
     @pytest.mark.component
-    def test_parameter_sweep_recover(self, model, tmp_path):
+    def test_parameter_sweep_recover(self, tmp_path):
         comm = MPI.COMM_WORLD
 
         tmp_path = _get_rank0_path(comm, tmp_path)
@@ -1447,7 +1437,7 @@ class TestParameterSweep:
             _assert_h5_csv_agreement(csv_results_file_name, read_dict)
 
     @pytest.mark.component
-    def test_parameter_sweep_bad_recover(self, model, tmp_path):
+    def test_parameter_sweep_bad_recover(self, tmp_path):
         comm = MPI.COMM_WORLD
 
         tmp_path = _get_rank0_path(comm, tmp_path)
@@ -1633,7 +1623,7 @@ class TestParameterSweep:
             _assert_h5_csv_agreement(csv_results_file_name, read_dict)
 
     @pytest.mark.component
-    def test_parameter_sweep_force_initialize(self, model, tmp_path):
+    def test_parameter_sweep_force_initialize(self, tmp_path):
         results_fname = os.path.join(tmp_path, "global_results_force_initialize")
         csv_results_file_name = str(results_fname) + ".csv"
         h5_results_file_name = str(results_fname) + ".h5"
@@ -1877,7 +1867,7 @@ class TestParameterSweep:
             )
 
     @pytest.mark.component
-    def test_parameter_sweep_bad_reinitialize_call(self, model):
+    def test_parameter_sweep_bad_reinitialize_call(self):
         def reinit(a=42):
             pass
 

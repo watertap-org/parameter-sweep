@@ -176,7 +176,7 @@ def test_aggregate_filtered_input_arr():
 
 
 @pytest.mark.component
-def test_recursive_parameter_sweep(model, tmp_path):
+def test_recursive_parameter_sweep(tmp_path):
     comm = MPI.COMM_WORLD
 
     tmp_path = _get_rank0_path(comm, tmp_path)
