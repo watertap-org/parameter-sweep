@@ -35,8 +35,7 @@ from parameter_sweep.parallel import MPI
 # -----------------------------------------------------------------------------
 
 
-@pytest.fixture
-def model():
+def build_model():
     """
     # Example Usage:
     # Set the number of trials
@@ -77,6 +76,25 @@ def model():
     m.fs.pos = pyo.Constraint(expr=m.fs.x >= 0.0)
 
     return m
+
+
+def build_sweep_params(m):
+    num_samples = 10
+    sweep_params = {}
+    sweep_params["a_val"] = UniformSample(m.fs.a, 0.0, 1.0, num_samples)
+    return sweep_params
+
+
+def build_outputs(model):
+    outputs = {}
+    outputs["x_val"] = model.find_component("fs.x")
+
+    return outputs
+
+
+@pytest.fixture
+def model():
+    return build_model()
 
 
 @pytest.mark.component
@@ -158,7 +176,7 @@ def test_aggregate_filtered_input_arr():
 
 
 @pytest.mark.component
-def test_recursive_parameter_sweep(model, tmp_path):
+def test_recursive_parameter_sweep(tmp_path):
     comm = MPI.COMM_WORLD
 
     tmp_path = _get_rank0_path(comm, tmp_path)
@@ -173,26 +191,14 @@ def test_recursive_parameter_sweep(model, tmp_path):
         debugging_data_dir=tmp_path,
     )
 
-    m = model
-
-    solver = pyo.SolverFactory("ipopt")
-
     num_samples = 10
-    sweep_params = {}
-    sweep_params["a_val"] = UniformSample(m.fs.a, 0.0, 1.0, num_samples)
 
-    outputs = {}
-    outputs["x_val"] = m.fs.x
-
-    # Run the parameter sweep study using num_samples randomly drawn from the above range
-
+    # Run the parameter sweep using num_samples randomly drawn from the above range
     seed = 0
-
-    # Run the parameter sweep
     data_array, results_dict = ps.parameter_sweep(
-        m,
-        sweep_params,
-        build_outputs=outputs,
+        build_model=build_model,
+        build_sweep_params=build_sweep_params,
+        build_outputs=build_outputs,
         num_samples=num_samples,
         seed=seed,
     )
@@ -212,10 +218,7 @@ def test_recursive_parameter_sweep(model, tmp_path):
         ]
     )
 
-    import pprint
-
-    # print("data = ")
-    # pprint.pprint(data)
+    m = build_model()
     assert np.shape(data_array) == (10, 2)
     assert np.allclose(reference_save_data, data_array, equal_nan=True)
     assert np.allclose(np.sum(data_array, axis=1), value(m.fs.success_prob))
