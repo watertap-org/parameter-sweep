@@ -809,8 +809,8 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
             _model = build_model
             build_model = lambda: _model
             deprecation_warning(
-                "Passing a model directly to the parameter_sweep function is deprecated \
-                                and will not work with future implementations of parallelism.",
+                "Passing a model directly to the parameter_sweep function is deprecated "
+                "and will not work with future implementations of parallelism.",
                 version="0.10.0",
             )
 
@@ -818,8 +818,8 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
             _sweep_params = build_sweep_params
             build_sweep_params = lambda model: _sweep_params
             deprecation_warning(
-                "Passing sweep params directly to the parameter_sweep function is deprecated \
-                                and will not work with future implementations of parallelism.",
+                "Passing sweep params directly to the parameter_sweep function is deprecated "
+                "and will not work with future implementations of parallelism.",
                 version="0.10.0",
             )
 
@@ -830,8 +830,8 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
             _combined_outputs = build_outputs
             build_outputs = lambda model: _combined_outputs
             deprecation_warning(
-                "Passing the output dict directly to the parameter_sweep function is deprecated \
-                                and will not work with future implementations of parallelism.",
+                "Passing the output dict directly to the parameter_sweep function is deprecated "
+                "and will not work with future implementations of parallelism.",
                 version="0.10.0",
             )
         # This should be depreciated in future versions
@@ -984,8 +984,8 @@ class RecursiveParameterSweep(_ParameterSweepBase):
             _model = build_model
             build_model = lambda: _model
             deprecation_warning(
-                "Passing a model directly to the parameter_sweep function is deprecated \
-                                and will not work with future implementations of parallelism.",
+                "Passing a model directly to the parameter_sweep function is deprecated "
+                "and will not work with future implementations of parallelism.",
                 version="0.10.0",
             )
 
@@ -993,8 +993,8 @@ class RecursiveParameterSweep(_ParameterSweepBase):
             _sweep_params = build_sweep_params
             build_sweep_params = lambda model: _sweep_params
             deprecation_warning(
-                "Passing sweep params directly to the parameter_sweep function is deprecated \
-                                and will not work with future implementations of parallelism.",
+                "Passing sweep params directly to the parameter_sweep function is deprecated "
+                "and will not work with future implementations of parallelism.",
                 version="0.10.0",
             )
 
@@ -1005,8 +1005,8 @@ class RecursiveParameterSweep(_ParameterSweepBase):
             _combined_outputs = build_outputs
             build_outputs = lambda model: _combined_outputs
             deprecation_warning(
-                "Passing the output dict directly to the parameter_sweep function is deprecated \
-                                and will not work with future implementations of parallelism.",
+                "Passing the output dict directly to the parameter_sweep function is deprecated "
+                "and will not work with future implementations of parallelism.",
                 version="0.10.0",
             )
         # This should be depreciated in future versions
