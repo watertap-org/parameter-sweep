@@ -66,6 +66,7 @@ def _default_optimize(model, options=None, tee=False):
 
 class _ParameterSweepBase(ABC):
     "Base class for Parameter Sweep classes."
+
     CONFIG = ParameterSweepWriter.CONFIG()
 
     CONFIG.declare(
@@ -672,6 +673,7 @@ class _ParameterSweepBase(ABC):
         # Forced reinitialization of the flowsheet if enabled
         # and model is not already initalized at givel local sweep param set
         # or init if model was not initialized or prior solved failed (if solved failed, init state is false)
+
         if (
             self.config.initialize_before_sweep
             and all(self.model_manager.current_k == local_value_k) == False
@@ -680,6 +682,7 @@ class _ParameterSweepBase(ABC):
                 self.model_manager.build_and_init(sweep_params, local_value_k)
         # try to solve our model
         self.model_manager.update_model_params(sweep_params, local_value_k)
+
         self.model_manager.solve_model()
 
         # if model failed to solve from a prior paramter solved state, lets try
@@ -780,6 +783,7 @@ class _ParameterSweepBase(ABC):
 
 class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
     "Standard Parameter Sweep implementation."
+
     CONFIG = _ParameterSweepBase.CONFIG()
 
     def parameter_sweep(
@@ -842,8 +846,15 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
         self.config.build_model_kwargs = build_model_kwargs
         self.config.build_sweep_params_kwargs = build_sweep_params_kwargs
         # create the list of all combinations - needed for some aspects of scattering
-        model = build_model(**build_model_kwargs)
-        sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
+
+        # model = build_model(**build_model_kwargs)
+        # setup model manager
+        # build model, the model will be rubilt and initialzied in kernel!
+        self.model_manager = ModelManager(self)
+        self.model_manager.build_and_init()
+        sweep_params = build_sweep_params(
+            self.model_manager.model, **build_sweep_params_kwargs
+        )
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
         np.random.seed(seed)
         all_parameter_combinations = self._build_combinations(
@@ -878,6 +889,7 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
 
 class RecursiveParameterSweep(_ParameterSweepBase):
     "Recursive Parameter Sweep implementation."
+
     CONFIG = _ParameterSweepBase.CONFIG()
 
     def _filter_recursive_solves(

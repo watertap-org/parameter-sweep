@@ -204,7 +204,10 @@ def do_build(
     for the sweep function. Defined at the top level so it's picklable.
     """
     ps_config = param_sweep_instance.config
-    model = ps_config.build_model(**ps_config.build_model_kwargs)
+    # this should already be available on our PS instance!
+    model = (
+        param_sweep_instance.model_manager.model
+    )  # build_model(**ps_config.build_model_kwargs)
     sweep_params = ps_config.build_sweep_params(
         model, **ps_config.build_sweep_params_kwargs
     )
