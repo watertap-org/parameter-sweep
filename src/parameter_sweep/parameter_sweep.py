@@ -1029,16 +1029,21 @@ class RecursiveParameterSweep(_ParameterSweepBase):
         self.config.build_model_kwargs = build_model_kwargs
         self.config.build_sweep_params_kwargs = build_sweep_params_kwargs
         # create the list of all combinations - needed for some aspects of scattering
-        model = build_model(**build_model_kwargs)
-        sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
+        # setup model manager
+        # build model, the model will be rubilt and initialzied in kernel!
+        self.model_manager = ModelManager(self)
+        self.model_manager.build_and_init()
+        sweep_params = build_sweep_params(
+            self.model_manager.model, **build_sweep_params_kwargs
+        )
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
-        outputs = build_outputs(model, **build_outputs_kwargs)
+        outputs = build_outputs(self.model_manager.model, **build_outputs_kwargs)
         # Set the seed before sampling
         np.random.seed(seed)
 
         # Check if the outputs have the name attribute. If not, assign one.
         if outputs is not None:
-            self.assign_variable_names(model, outputs)
+            self.assign_variable_names(self.model_manager.model, outputs)
 
         n_samples_remaining = num_samples
         num_total_samples = num_samples
@@ -1121,7 +1126,7 @@ class RecursiveParameterSweep(_ParameterSweepBase):
         # Now that we have all of the local output dictionaries, we need to construct
         # a consolidated dictionary based on a filter, e.g., optimal solves.
         local_filtered_dict, local_n_successful = self._filter_recursive_solves(
-            model, sweep_params, outputs, local_output_collection
+            self.model_manager.model, sweep_params, outputs, local_output_collection
         )
 
         # if we are debugging
