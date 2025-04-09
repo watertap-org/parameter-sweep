@@ -109,8 +109,7 @@ jobs:
       - if: matrix.mpi
         name: Collect coverage for MPI-using code
         run: |
-          conda install --yes mpi4py
-          pytest
+          conda install --quiet --yes mpi4py
           mpiexec -n 2 \
           coverage run --parallel-mode \
           -m mpi4py -m pytest \
