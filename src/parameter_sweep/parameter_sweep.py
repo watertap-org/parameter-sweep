@@ -448,6 +448,8 @@ class _ParameterSweepBase(ABC):
 
         if obj is None:
             raise ValueError(f"Did not find {name} in {model}")
+        else:
+            return obj
 
     def _update_model_values(self, m, param_dict, values):
         # remove index from values
