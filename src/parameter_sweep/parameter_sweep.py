@@ -447,6 +447,7 @@ class _ParameterSweepBase(ABC):
             obj = model.find_component(name)
 
         if obj is None:
+            model.display()
             raise ValueError(f"Did not find {name} in {model}")
         else:
             return obj
