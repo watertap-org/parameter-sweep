@@ -442,9 +442,12 @@ class _ParameterSweepBase(ABC):
         # but can't be found by find_component
         if "[None]" in name:
             name = name.replace("[None]", "")
-            return model.find_component(name)[None]
+            obj = model.find_component(name)[None]
         else:
-            return model.find_component(name)
+            obj = model.find_component(name)
+
+        if obj is None:
+            raise ValueError(f"Did not find {name} in {model}")
 
     def _update_model_values(self, m, param_dict, values):
         # remove index from values
