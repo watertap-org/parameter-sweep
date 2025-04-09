@@ -34,11 +34,9 @@ class ModelManager:
         self.solved_states = {"state": [], "local_value_k": []}
         self.initialized_states = {"state": [], "local_value_k": []}
         self.current_k = None
-        self.model = None
 
     def build(self):
         """build model only"""
-        del self.model
         self.model = self.ps_conf.build_model(**self.ps_conf.build_model_kwargs)
 
     def build_and_init(self, sweep_params=None, local_value_k=None):

@@ -447,7 +447,6 @@ class _ParameterSweepBase(ABC):
             obj = model.find_component(name)
 
         if obj is None:
-            model.display()
             raise ValueError(f"Did not find {name} in {model}")
         else:
             return obj
@@ -725,7 +724,6 @@ class _ParameterSweepBase(ABC):
             run_successful = False
             # makes sure that if model was build,, but failed to init
             # we store the pars that were run
-
         # Update the loop based on the reinitialization
         self._update_local_output_dict(
             self.model_manager.model,
@@ -858,9 +856,8 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
         # build model, the model will be rubilt and initialzied in kernel!
         self.model_manager = ModelManager(self)
         self.model_manager.build_and_init()
-        sweep_params = build_sweep_params(
-            self.model_manager.model, **build_sweep_params_kwargs
-        )
+        model = self.model_manager.model
+        sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
         np.random.seed(seed)
         all_parameter_combinations = self._build_combinations(
@@ -1037,19 +1034,20 @@ class RecursiveParameterSweep(_ParameterSweepBase):
         # create the list of all combinations - needed for some aspects of scattering
         # setup model manager
         # build model, the model will be rubilt and initialzied in kernel!
+
         self.model_manager = ModelManager(self)
         self.model_manager.build_and_init()
-        sweep_params = build_sweep_params(
-            self.model_manager.model, **build_sweep_params_kwargs
-        )
+        model = self.model_manager.model
+        sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
-        outputs = build_outputs(self.model_manager.model, **build_outputs_kwargs)
+
+        outputs = build_outputs(model, **build_outputs_kwargs)
         # Set the seed before sampling
         np.random.seed(seed)
 
         # Check if the outputs have the name attribute. If not, assign one.
         if outputs is not None:
-            self.assign_variable_names(self.model_manager.model, outputs)
+            self.assign_variable_names(model, outputs)
 
         n_samples_remaining = num_samples
         num_total_samples = num_samples
@@ -1067,7 +1065,6 @@ class RecursiveParameterSweep(_ParameterSweepBase):
             global_values = self._build_combinations(
                 sweep_params, sampling_type, num_total_samples
             )
-
             # divide the workload between processors
             local_values = self._divide_combinations(global_values)
             local_num_cases = np.shape(local_values)[0]
@@ -1089,7 +1086,6 @@ class RecursiveParameterSweep(_ParameterSweepBase):
                         **self.config.custom_do_param_sweep_kwargs,
                     )
                 )
-
             # Get the number of successful solves on this proc (sum of boolean flags)
             success_count = sum(local_output_collection[loop_ctr]["solve_successful"])
             failure_count = local_num_cases - success_count
