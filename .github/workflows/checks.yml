@@ -110,6 +110,7 @@ jobs:
         name: Collect coverage for MPI-using code
         run: |
           conda install --yes mpi4py
+          pytest
           mpiexec -n 2 \
           coverage run --parallel-mode \
           -m mpi4py -m pytest \
