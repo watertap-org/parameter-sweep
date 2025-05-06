@@ -590,7 +590,7 @@ class _ParameterSweepBase(ABC):
                 if local_outputs is not None and var_name in local_outputs.keys():
                     pyo_obj = local_outputs[var_name]
                 else:
-                    raise ValueError(f"Did not find {var_name} in {model}")
+                    return np.nan
             return pyo.value(pyo_obj)
 
         # Get the inputs
