@@ -581,9 +581,9 @@ class _ParameterSweepBase(ABC):
 
         def get_output_value(model, var_name, specs, local_outputs):
             """Try to get object from model for outputs,
-            We assume the output is a Var, Param, or Expression built on model adn we
-            can find it by full_name, if its not we assume its a user defined expression
-            built on demand in user provided outputs, we thus use a local copy of built
+            We assume the output is a Var, Param, or Expression built on model and we
+            can find it by full_name, if its not we assume, its a user defined expression
+            built on demand and is in user provided outputs, we thus use a local copy of built
             outputs and find that output explicitly using var_name"""
             pyo_obj = model.find_component(specs["full_name"])
             if pyo_obj is None:
@@ -595,6 +595,7 @@ class _ParameterSweepBase(ABC):
 
         # Get the inputs
         op_ps_dict = output_dict["sweep_params"]
+        # Build a local copy of the output using current model state
         local_built_outputs = self.config.build_outputs(
             model, **self.config.build_outputs_kwargs
         )
@@ -610,21 +611,22 @@ class _ParameterSweepBase(ABC):
                 # incase value is not initlized or can't be evalauted
                 # typical case, is a var is created, but not initlized or touched, such is 0 index vars in 1D RO
                 try:
-                    output_dict["outputs"][var_name]["value"][case_number] = (
-                        get_output_value(model, var_name, specs, local_built_outputs)
+                    result = get_output_value(
+                        model, var_name, specs, local_built_outputs
                     )
+                    output_dict["outputs"][var_name]["value"][case_number] = result
                 except ValueError:
                     pass
-
         else:
             for var_name, specs in output_dict["outputs"].items():
                 pyo_obj = model.find_component(specs["full_name"])
                 # we only want to store exact sweeped paramter, which must be Var or mutable Param on model tree,
                 # as such it should be findable on model.
                 if pyo_obj is not None and pyo_obj.name in sweep_params.keys():
-                    output_dict["outputs"][var_name]["value"][case_number] = (
-                        get_output_value(model, var_name, specs, local_built_outputs)
+                    result = get_output_value(
+                        model, var_name, specs, local_built_outputs
                     )
+                    output_dict["outputs"][var_name]["value"][case_number] = result
                 else:
                     output_dict["outputs"][var_name]["value"][case_number] = np.nan
 
