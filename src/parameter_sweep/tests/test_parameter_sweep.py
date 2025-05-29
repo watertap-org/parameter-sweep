@@ -812,7 +812,6 @@ class TestParameterSweep:
         results_fname = os.path.join(tmp_path, "global_results")
         csv_results_file_name = str(results_fname) + ".csv"
         h5_results_file_name = str(results_fname) + ".h5"
-
         ps = ParameterSweep(
             optimize_function=_optimization,
             csv_results_file_name=csv_results_file_name,

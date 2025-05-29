@@ -74,7 +74,6 @@ def build_model():
     m.fs.err = pyo.Expression(expr=m.fs.a + m.fs.x - m.fs.success_prob)
     m.fs.sum = pyo.Constraint(expr=m.fs.err == 0.0)
     m.fs.pos = pyo.Constraint(expr=m.fs.x >= 0.0)
-
     return m
 
 
@@ -88,7 +87,6 @@ def build_sweep_params(m):
 def build_outputs(model):
     outputs = {}
     outputs["x_val"] = model.find_component("fs.x")
-
     return outputs
 
 

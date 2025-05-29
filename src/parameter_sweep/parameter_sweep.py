@@ -66,6 +66,7 @@ def _default_optimize(model, options=None, tee=False):
 
 class _ParameterSweepBase(ABC):
     "Base class for Parameter Sweep classes."
+
     CONFIG = ParameterSweepWriter.CONFIG()
 
     CONFIG.declare(
@@ -441,9 +442,14 @@ class _ParameterSweepBase(ABC):
         # but can't be found by find_component
         if "[None]" in name:
             name = name.replace("[None]", "")
-            return model.find_component(name)[None]
+            obj = model.find_component(name)[None]
         else:
-            return model.find_component(name)
+            obj = model.find_component(name)
+
+        if obj is None:
+            raise ValueError(f"Did not find {name} in {model}")
+        else:
+            return obj
 
     def _update_model_values(self, m, param_dict, values):
         # remove index from values
@@ -572,8 +578,27 @@ class _ParameterSweepBase(ABC):
     def _update_local_output_dict(
         self, model, sweep_params, case_number, run_successful, output_dict
     ):
+
+        def get_output_value(model, var_name, specs, local_outputs):
+            """Try to get object from model for outputs,
+            We assume the output is a Var, Param, or Expression built on model and we
+            can find it by full_name, if its not we assume, its a user defined expression
+            built on demand and is in user provided outputs, we thus use a local copy of built
+            outputs and find that output explicitly using var_name"""
+            pyo_obj = model.find_component(specs["full_name"])
+            if pyo_obj is None:
+                if local_outputs is not None and var_name in local_outputs.keys():
+                    pyo_obj = local_outputs[var_name]
+                else:
+                    return np.nan
+            return pyo.value(pyo_obj)
+
         # Get the inputs
         op_ps_dict = output_dict["sweep_params"]
+        # Build a local copy of the output using current model state
+        local_built_outputs = self.config.build_outputs(
+            model, **self.config.build_outputs_kwargs
+        )
         for key, item in sweep_params.items():
             # stores value actually applied to model, rather one assumed to be applied
             op_ps_dict[key]["value"][case_number] = self._get_object(
@@ -583,25 +608,27 @@ class _ParameterSweepBase(ABC):
         # Get the outputs from model
         if run_successful:
             for var_name, specs in output_dict["outputs"].items():
-                pyo_obj = model.find_component(specs["full_name"])
                 # incase value is not initlized or can't be evalauted
                 # typical case, is a var is created, but not initlized or touched, such is 0 index vars in 1D RO
                 try:
-                    output_dict["outputs"][var_name]["value"][case_number] = pyo.value(
-                        pyo_obj
+                    result = get_output_value(
+                        model, var_name, specs, local_built_outputs
                     )
+                    output_dict["outputs"][var_name]["value"][case_number] = result
                 except ValueError:
                     pass
-
         else:
-            for label, specs in output_dict["outputs"].items():
+            for var_name, specs in output_dict["outputs"].items():
                 pyo_obj = model.find_component(specs["full_name"])
-                if pyo_obj.name in sweep_params.keys():
-                    output_dict["outputs"][label]["value"][case_number] = pyo.value(
-                        pyo_obj
+                # we only want to store exact sweeped paramter, which must be Var or mutable Param on model tree,
+                # as such it should be findable on model.
+                if pyo_obj is not None and pyo_obj.name in sweep_params.keys():
+                    result = get_output_value(
+                        model, var_name, specs, local_built_outputs
                     )
+                    output_dict["outputs"][var_name]["value"][case_number] = result
                 else:
-                    output_dict["outputs"][label]["value"][case_number] = np.nan
+                    output_dict["outputs"][var_name]["value"][case_number] = np.nan
 
     def _create_global_output(self, local_output_dict, req_num_samples=None):
         # We make the assumption that the parameter sweep is running the same
@@ -672,6 +699,7 @@ class _ParameterSweepBase(ABC):
         # Forced reinitialization of the flowsheet if enabled
         # and model is not already initalized at givel local sweep param set
         # or init if model was not initialized or prior solved failed (if solved failed, init state is false)
+
         if (
             self.config.initialize_before_sweep
             and all(self.model_manager.current_k == local_value_k) == False
@@ -680,6 +708,7 @@ class _ParameterSweepBase(ABC):
                 self.model_manager.build_and_init(sweep_params, local_value_k)
         # try to solve our model
         self.model_manager.update_model_params(sweep_params, local_value_k)
+
         self.model_manager.solve_model()
 
         # if model failed to solve from a prior paramter solved state, lets try
@@ -716,7 +745,6 @@ class _ParameterSweepBase(ABC):
             run_successful = False
             # makes sure that if model was build,, but failed to init
             # we store the pars that were run
-
         # Update the loop based on the reinitialization
         self._update_local_output_dict(
             self.model_manager.model,
@@ -780,6 +808,7 @@ class _ParameterSweepBase(ABC):
 
 class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
     "Standard Parameter Sweep implementation."
+
     CONFIG = _ParameterSweepBase.CONFIG()
 
     def parameter_sweep(
@@ -842,7 +871,13 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
         self.config.build_model_kwargs = build_model_kwargs
         self.config.build_sweep_params_kwargs = build_sweep_params_kwargs
         # create the list of all combinations - needed for some aspects of scattering
-        model = build_model(**build_model_kwargs)
+
+        # model = build_model(**build_model_kwargs)
+        # setup model manager
+        # build model, the model will be rubilt and initialzied in kernel!
+        self.model_manager = ModelManager(self)
+        self.model_manager.build_and_init()
+        model = self.model_manager.model
         sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
         np.random.seed(seed)
@@ -878,6 +913,7 @@ class ParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUtils):
 
 class RecursiveParameterSweep(_ParameterSweepBase):
     "Recursive Parameter Sweep implementation."
+
     CONFIG = _ParameterSweepBase.CONFIG()
 
     def _filter_recursive_solves(
@@ -1017,9 +1053,15 @@ class RecursiveParameterSweep(_ParameterSweepBase):
         self.config.build_model_kwargs = build_model_kwargs
         self.config.build_sweep_params_kwargs = build_sweep_params_kwargs
         # create the list of all combinations - needed for some aspects of scattering
-        model = build_model(**build_model_kwargs)
+        # setup model manager
+        # build model, the model will be rubilt and initialzied in kernel!
+
+        self.model_manager = ModelManager(self)
+        self.model_manager.build_and_init()
+        model = self.model_manager.model
         sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
+
         outputs = build_outputs(model, **build_outputs_kwargs)
         # Set the seed before sampling
         np.random.seed(seed)
@@ -1044,7 +1086,6 @@ class RecursiveParameterSweep(_ParameterSweepBase):
             global_values = self._build_combinations(
                 sweep_params, sampling_type, num_total_samples
             )
-
             # divide the workload between processors
             local_values = self._divide_combinations(global_values)
             local_num_cases = np.shape(local_values)[0]
@@ -1066,7 +1107,6 @@ class RecursiveParameterSweep(_ParameterSweepBase):
                         **self.config.custom_do_param_sweep_kwargs,
                     )
                 )
-
             # Get the number of successful solves on this proc (sum of boolean flags)
             success_count = sum(local_output_collection[loop_ctr]["solve_successful"])
             failure_count = local_num_cases - success_count
@@ -1109,7 +1149,7 @@ class RecursiveParameterSweep(_ParameterSweepBase):
         # Now that we have all of the local output dictionaries, we need to construct
         # a consolidated dictionary based on a filter, e.g., optimal solves.
         local_filtered_dict, local_n_successful = self._filter_recursive_solves(
-            model, sweep_params, outputs, local_output_collection
+            self.model_manager.model, sweep_params, outputs, local_output_collection
         )
 
         # if we are debugging

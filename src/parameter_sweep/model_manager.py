@@ -35,9 +35,13 @@ class ModelManager:
         self.initialized_states = {"state": [], "local_value_k": []}
         self.current_k = None
 
+    def build(self):
+        """build model only"""
+        self.model = self.ps_conf.build_model(**self.ps_conf.build_model_kwargs)
+
     def build_and_init(self, sweep_params=None, local_value_k=None):
         """build and init model, if required by user, update paramaters before init"""
-        self.model = self.ps_conf.build_model(**self.ps_conf.build_model_kwargs)
+        self.build()
         # intilized model if init function is passed in
         if self.ps_conf.initialize_function is not None:
             # update paramters before init if enabled by user
