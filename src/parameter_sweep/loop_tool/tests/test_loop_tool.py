@@ -220,11 +220,13 @@ def test_diff_setup(loop_diff_setup):
 
 @pytest.mark.parametrize(
     "loop_workers",
-    [loop_sweep_setup, loop_sweep_setup],
+    [False, True],
 )
-@pytest.mark.component
-def test_sweep_run(loop_workers):
-    lp, test_file = loop_workers
+def test_sweep_run(loop_sweep_setup, loop_sweep_setup_with_workers, loop_workers):
+    if loop_workers:
+        lp, test_file = loop_sweep_setup_with_workers
+    else:
+        lp, test_file = loop_sweep_setup
     lp.build_run_dict()
     # remove any existing file before test
     if has_mpi_peer_processes() == False or (
@@ -303,6 +305,7 @@ def test_sweep_backup(loop_sweep_setup):
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
+        print(lp.h5_backup_location)
         assert lp.h5_backup_location != None
         h5file = h5py.File(
             lp.h5_file_location_default + "_analysisType_ro_analysis.h5", "r"
