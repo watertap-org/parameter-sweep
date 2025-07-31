@@ -99,6 +99,35 @@ def loop_sweep_setup():
 
 
 @pytest.fixture()
+def loop_sweep_setup_with_workers():
+    lp = loopTool(
+        _this_file_path + "/test_sweep.yaml",
+        build_function=ro_setup.ro_build,
+        initialize_function=ro_setup.ro_init,
+        optimize_function=ro_setup.ro_solve,
+        saving_dir=_this_file_path,
+        save_name="ro_with_erd",
+        execute_simulations=False,
+        number_of_subprocesses=1,
+        num_loop_workers=2,
+    )
+    lp.build_run_dict()
+    """ used to generate test file"""
+    # with open("test_expected_sweep_directory.yaml", "w") as file:
+    #     documents = yaml.dump(lp.sweep_directory, file)
+    if has_mpi_peer_processes() == False or (
+        has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+    ):
+        with open(
+            _this_file_path + "/test_expected_sweep_directory.yaml", "r"
+        ) as infile:
+            expected_run_dict = yaml.safe_load(infile)
+    else:
+        expected_run_dict = None
+    return lp, expected_run_dict
+
+
+@pytest.fixture()
 def loop_diff_setup():
     lp = loopTool(
         _this_file_path + "/test_diff.yaml",
@@ -189,9 +218,13 @@ def test_diff_setup(loop_diff_setup):
         assert diff_dict_check(lp.sweep_directory, expected_run_dict)
 
 
+@pytest.mark.parametrize(
+    "loop_workers",
+    [loop_sweep_setup, loop_sweep_setup],
+)
 @pytest.mark.component
-def test_sweep_run(loop_sweep_setup):
-    lp, test_file = loop_sweep_setup
+def test_sweep_run(loop_workers):
+    lp, test_file = loop_workers
     lp.build_run_dict()
     # remove any existing file before test
     if has_mpi_peer_processes() == False or (
