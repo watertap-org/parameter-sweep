@@ -23,6 +23,10 @@ import copy
 import os
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
+from parameter_sweep.parallel.parallel_manager_factory import (
+    has_mpi_peer_processes,
+    get_mpi_comm_process,
+)
 
 __author__ = "Alexander V. Dudchenko (SLAC)"
 
@@ -74,7 +78,7 @@ class loopTool:
                                     other user can call build_run_dict, and run_simulations call manually
             h5_backup : Set location for back up file, if set to False, no backup will be created, otherwise backup will be autocreated
             num_loop_workers : number of workers to use for loop_tool, if set to None, will run loop in serial, otherwise will
-             use as many workers as specified to run through all loop options in parallel.
+                                use as many workers as specified to run through all loop options in parallel.
         """
 
         self.loop_file = loop_file
@@ -188,13 +192,16 @@ class loopTool:
             for value in self.execution_list:
                 self.execute_param_sweep_run(value)
         else:
-            with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
-                [
-                    r
-                    for r in executor.map(
-                        self.execute_param_sweep_run, self.execution_list
-                    )
-                ]
+            if has_mpi_peer_processes() == False or (
+                has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+            ):
+                with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
+                    [
+                        r
+                        for r in executor.map(
+                            self.execute_param_sweep_run, self.execution_list
+                        )
+                    ]
 
     def get_loop_type(self, loop):
         """containst types of loop options that are extracted from yaml file
