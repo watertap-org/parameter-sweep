@@ -18,15 +18,10 @@ from parameter_sweep.parallel.parallel_manager_factory import (
     get_mpi_comm_process,
 )
 from parameter_sweep._compat import get_solver
-from parameter_sweep.writer import ParameterSweepWriter
 import copy
 import os
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
-from parameter_sweep.parallel.parallel_manager_factory import (
-    has_mpi_peer_processes,
-    get_mpi_comm_process,
-)
 
 __author__ = "Alexander V. Dudchenko (SLAC)"
 
