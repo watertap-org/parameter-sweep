@@ -223,10 +223,11 @@ def test_diff_setup(loop_diff_setup):
     [False, True],
 )
 def test_sweep_run(loop_sweep_setup, loop_sweep_setup_with_workers, loop_workers):
-    if loop_workers:
+    if loop_workers and has_mpi_peer_processes() == False:
         lp, test_file = loop_sweep_setup_with_workers
     else:
         lp, test_file = loop_sweep_setup
+
     lp.build_run_dict()
     # remove any existing file before test
     if has_mpi_peer_processes() == False or (

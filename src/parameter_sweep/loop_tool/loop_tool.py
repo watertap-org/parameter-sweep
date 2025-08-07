@@ -73,7 +73,6 @@ class loopTool:
             max number of logical cores, if set to False, will disable MPI and set number_of_subprocesses to 0
             custom_do_param_sweep : custom param function (refer to parameter sweep tool)
             custom_do_param_sweep_kwargs : custom parm kwargs (refer to parameter sweep tool)
-
             execute_simulations : of looptool should execute simulations upon setup,
                                     other user can call build_run_dict, and run_simulations call manually
             h5_backup : Set location for back up file, if set to False, no backup will be created, otherwise backup will be autocreated
@@ -101,7 +100,7 @@ class loopTool:
         self.build_outputs = build_outputs
         self.h5_backup_location = h5_backup
         self.num_loop_workers = num_loop_workers
-        """ supported keys for yaml config file. please update as new options are added"""
+        # supported keys for yaml config file. please update as new options are added
         self._supported_default_options = [
             "initialize_before_sweep",
             "update_sweep_params_before_init",
@@ -126,7 +125,7 @@ class loopTool:
 
     def build_run_dict(self):
         """
-        This builds the dict that will be used for simulatiuons
+        This builds the dict that will be used for simulations
         """
 
         loop_dict = ParameterSweepReader()._yaml_to_dict(self.loop_file)
@@ -192,19 +191,16 @@ class loopTool:
             for value in self.execution_list:
                 self.execute_param_sweep_run(value)
         else:
-            if has_mpi_peer_processes() == False or (
-                has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
-            ):
-                with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
-                    [
-                        r
-                        for r in executor.map(
-                            self.execute_param_sweep_run, self.execution_list
-                        )
-                    ]
+            with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
+                [
+                    r
+                    for r in executor.map(
+                        self.execute_param_sweep_run, self.execution_list
+                    )
+                ]
 
     def get_loop_type(self, loop):
-        """containst types of loop options that are extracted from yaml file
+        """contains types of loop options that are extracted from yaml file
         build_loop - options that are passed into build function
         init_loop - options that are passed into initialization function
         optimize_loop - options that are passed into optimize function
