@@ -350,6 +350,10 @@ def test_diff_run(loop_diff_setup):
             lp.h5_file_location_default + "_analysisType_ro_diff_analysis.h5"
         ):
             os.remove(lp.h5_file_location_default + "_analysisType_ro_diff_analysis.h5")
+
+    lp, test_file = loop_diff_setup
+    lp.build_run_dict()
+
     lp.run_simulations()
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
