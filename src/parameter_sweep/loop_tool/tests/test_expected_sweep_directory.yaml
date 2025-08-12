@@ -9,6 +9,7 @@ ro_analysis:
           diff_samples: 0
           expected_num_samples: 3
           force_rerun: null
+          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
           h5dir: ro_analysis/erd_type/pressure_exchanger/membrane_cost
           init_defaults: {}
           min_num_samples: null
@@ -59,6 +60,7 @@ ro_analysis:
           diff_samples: 0
           expected_num_samples: 4
           force_rerun: null
+          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
           h5dir: ro_analysis/erd_type/pressure_exchanger/membrane_group
           init_defaults: {}
           min_num_samples: null
@@ -114,9 +116,9 @@ ro_analysis:
             erd_type: pump_as_turbine
           diff_params: {}
           diff_samples: 0
-          dir: D:\OneDrive\NAWI_work\Analysis\WaterTAP\watertap-dev\watertap\tools\analysis_tools\loop_tool\tests/output/ro_with_erd/ro_analysis/erd_type/pump_as_turbine/membrane_cost
           expected_num_samples: 3
           force_rerun: null
+          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
           h5dir: ro_analysis/erd_type/pump_as_turbine/membrane_cost
           init_defaults: {}
           min_num_samples: null
@@ -165,9 +167,9 @@ ro_analysis:
             erd_type: pump_as_turbine
           diff_params: {}
           diff_samples: 0
-          dir: D:\OneDrive\NAWI_work\Analysis\WaterTAP\watertap-dev\watertap\tools\analysis_tools\loop_tool\tests/output/ro_with_erd/ro_analysis/erd_type/pump_as_turbine/membrane_group
           expected_num_samples: 4
           force_rerun: null
+          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
           h5dir: ro_analysis/erd_type/pump_as_turbine/membrane_group
           init_defaults: {}
           min_num_samples: null
