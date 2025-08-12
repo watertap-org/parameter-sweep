@@ -136,9 +136,12 @@ class loopTool:
                 self.h5_file_location_default + "_analysisType_" + str(val) + ".h5"
             )
             print("Checking h5_location:", self.h5_file_location)
-            self.h5_backup_location = create_backup_file(
-                self.h5_file_location, self.h5_backup_location, self.h5_directory
-            )
+            if has_mpi_peer_processes() == False or (
+                has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+            ):
+                self.h5_backup_location = create_backup_file(
+                    self.h5_file_location, self.h5_backup_location, self.h5_directory
+                )
             print("h5_backup_location:", self.h5_backup_location)
             loop_type = self.get_loop_type(loop)
             self.options = loop
