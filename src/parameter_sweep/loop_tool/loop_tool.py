@@ -131,6 +131,13 @@ class loopTool:
             self.init_sim_options()
             self.save_dir = self.save_dir + "/" + key
             self.h5_directory = key
+            val = self.h5_directory.split("/")[0]
+            self.h5_file_location = (
+                self.h5_file_location_default + "_analysisType_" + str(val) + ".h5"
+            )
+            self.h5_backup_location = create_backup_file(
+                self.h5_file_location, self.h5_backup_location, self.h5_directory
+            )
             loop_type = self.get_loop_type(loop)
             self.options = loop
             self.sweep_directory[key], _ = self.build_sweep_directories(
@@ -186,6 +193,7 @@ class loopTool:
             for value in self.execution_list:
                 self.execute_param_sweep_run(value)
         else:
+
             with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
                 [
                     r
@@ -269,6 +277,7 @@ class loopTool:
                             "simulation_setup": {
                                 "dir": local_dir,
                                 "h5dir": h5_local_dir,
+                                "h5_backup_location": self.h5_backup_location,
                                 "build_defaults": copy.deepcopy(self.build_defaults),
                                 "init_defaults": copy.deepcopy(self.init_defaults),
                                 "optimize_defaults": copy.deepcopy(
@@ -493,10 +502,14 @@ class loopTool:
         self.init_defaults = value["init_defaults"]
         self.save_dir = value["dir"]
         self.h5_directory = value["h5dir"]
+
         val = self.h5_directory.split("/")[0]
 
         self.h5_file_location = (
             self.h5_file_location_default + "_analysisType_" + str(val) + ".h5"
+        )
+        self.h5_backup_location = value.get(
+            "h5_backup_location", self.h5_backup_location
         )
         # resets it if file name changes
         if (
