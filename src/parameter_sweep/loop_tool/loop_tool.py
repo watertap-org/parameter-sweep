@@ -511,6 +511,7 @@ class loopTool:
         self.h5_backup_location = value.get(
             "h5_backup_location", self.h5_backup_location
         )
+
         # resets it if file name changes
         if (
             self.h5_backup_location is not None
@@ -527,7 +528,7 @@ class loopTool:
         first loading defaults provided by default calls, followed
         by those in the loops, overriding any defaults or adding new
         options to kwargs"""
-        # check if user wants to reinit befoure sweep.
+        # check if user wants to reinit before sweep.
 
         self.initialize_before_sweep = self.options.get(
             "initialize_before_sweep", False
