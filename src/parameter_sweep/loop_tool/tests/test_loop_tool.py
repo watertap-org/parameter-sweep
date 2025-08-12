@@ -300,12 +300,13 @@ def test_sweep_backup(loop_sweep_setup):
     """test that backup works, will not run actual simulation ,create a back up file, and
     load data from it into sim file. The lp.back_file_name should not be None
     """
-    lp, test_file = loop_sweep_setup
-    lp.build_run_dict()
-    lp.run_simulations()
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
+        lp, test_file = loop_sweep_setup
+        lp.build_run_dict()
+        lp.run_simulations()
+
         print(lp.h5_backup_location)
         assert lp.h5_backup_location != None
         h5file = h5py.File(
