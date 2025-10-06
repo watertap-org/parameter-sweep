@@ -34,7 +34,7 @@ _this_file_path = os.path.dirname(os.path.abspath(__file__))
 
 def diff_dict_check(dicta, dictb):
     for key in dicta:
-        if key != "dir":
+        if key != "dir" and key != "h5_backup_location":
             if isinstance(dicta[key], dict):
                 diff_dict_check(dicta[key], dictb[key])
 

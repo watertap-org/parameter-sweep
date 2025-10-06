@@ -96,7 +96,12 @@ class loopTool:
         self.build_outputs = build_outputs
         self.h5_backup_location = h5_backup
         self.num_loop_workers = num_loop_workers
-        if self.num_loop_workers > 1 and number_of_subprocesses > 1:
+        if (
+            self.num_loop_workers is not None
+            and self.num_loop_workers > 1
+            and number_of_subprocesses is not None
+            and number_of_subprocesses > 1
+        ):
             warnings.warn(
                 "When ruining more then one loop workers, multiple subprocesses are not supported and might lead to unexpected behavior."
             )
