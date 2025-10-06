@@ -216,7 +216,7 @@ class loopTool:
                 ]
 
     def get_loop_type(self, loop):
-        """contains types of loop options that are extracted from yaml file
+        """Contains types of loop options that are extracted from yaml file
         build_loop - options that are passed into build function
         init_loop - options that are passed into initialization function
         optimize_loop - options that are passed into optimize function
