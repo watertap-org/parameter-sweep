@@ -103,7 +103,7 @@ class loopTool:
             and number_of_subprocesses > 1
         ):
             warnings.warn(
-                "When ruining more then one loop workers, multiple subprocesses are not supported and might lead to unexpected behavior."
+                "When running more than one loop worker, multiple subprocesses are not supported and might lead to unexpected behavior."
             )
         # supported keys for yaml config file. please update as new options are added
         self._supported_default_options = [
