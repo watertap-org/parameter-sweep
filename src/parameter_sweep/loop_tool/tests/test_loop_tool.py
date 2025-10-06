@@ -239,7 +239,7 @@ def test_sweep_run(loop_sweep_setup, loop_sweep_setup_with_workers, loop_workers
 
     lp.run_simulations()
     if loop_workers:
-        time.sleep(10)  # ensure it wrote all the files, in loop worker mode
+        time.sleep(20)  # ensure it wrote all the files, in loop worker mode
         # we can expect delays as workers wait for files to become available.
 
     if has_mpi_peer_processes() == False or (
