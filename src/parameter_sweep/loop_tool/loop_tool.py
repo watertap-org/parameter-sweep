@@ -491,7 +491,6 @@ class loopTool:
         if no data exists in the back upfile, or user forces exceution
         this defined by check solution exists function
         """
-        # print("executing", value)
         self.setup_param_sweep(value)
         solution_test = self.check_solution_exists()
         if solution_test:
