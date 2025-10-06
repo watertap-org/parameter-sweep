@@ -15,6 +15,7 @@ import numpy as np
 import h5py
 import yaml
 
+import time
 from parameter_sweep.loop_tool.loop_tool import loopTool, get_working_dir
 from parameter_sweep.parallel.parallel_manager_factory import (
     has_mpi_peer_processes,
@@ -237,6 +238,10 @@ def test_sweep_run(loop_sweep_setup, loop_sweep_setup_with_workers, loop_workers
             os.remove(lp.h5_file_location_default + "_analysisType_ro_analysis.h5")
 
     lp.run_simulations()
+    if loop_workers:
+        time.sleep(10)  # ensure it wrote all the files, in loop worker mode
+        # we can expect delays as workers wait for files to become available.
+
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
