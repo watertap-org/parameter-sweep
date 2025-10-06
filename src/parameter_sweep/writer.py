@@ -20,6 +20,7 @@ import time
 from scipy.interpolate import griddata
 
 from pyomo.common.config import ConfigDict, ConfigValue
+from random import randint
 
 
 def get_h5_file(file_name, mode="a"):
@@ -28,7 +29,14 @@ def get_h5_file(file_name, mode="a"):
             h5file = h5py.File(file_name, mode)
             return h5file
         except OSError as e:
-            time.sleep(0.1)
+            print(
+                "\n\n\n\nCould not open file {}, attempt {}/60\n\n\n\n".format(
+                    file_name, i + 1
+                )
+            )
+            # ensure we wait a bit before trying again especially if there
+            # are many workers trying to access the file
+            time.sleep(5 + randint(0, 100) / 50)
     raise OSError("Could not open file {} after 60 attempts".format(file_name))
 
 
