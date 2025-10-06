@@ -8,8 +8,7 @@ ro_analysis:
           diff_params: {}
           diff_samples: 0
           expected_num_samples: 3
-          force_rerun: null
-          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
+          force_rerun: null          
           h5dir: ro_analysis/erd_type/pressure_exchanger/membrane_cost
           init_defaults: {}
           min_num_samples: null
@@ -59,8 +58,7 @@ ro_analysis:
           diff_params: {}
           diff_samples: 0
           expected_num_samples: 4
-          force_rerun: null
-          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
+          force_rerun: null          
           h5dir: ro_analysis/erd_type/pressure_exchanger/membrane_group
           init_defaults: {}
           min_num_samples: null
@@ -117,8 +115,7 @@ ro_analysis:
           diff_params: {}
           diff_samples: 0
           expected_num_samples: 3
-          force_rerun: null
-          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
+          force_rerun: null          
           h5dir: ro_analysis/erd_type/pump_as_turbine/membrane_cost
           init_defaults: {}
           min_num_samples: null
@@ -168,8 +165,7 @@ ro_analysis:
           diff_params: {}
           diff_samples: 0
           expected_num_samples: 4
-          force_rerun: null
-          h5_backup_location: D:\github\parameter-sweep\src\parameter_sweep\loop_tool\tests/output/ro_with_erd_analysisType_ro_analysis.h5_12_08-13_54_45_.bak
+          force_rerun: null          
           h5dir: ro_analysis/erd_type/pump_as_turbine/membrane_group
           init_defaults: {}
           min_num_samples: null
