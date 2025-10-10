@@ -10,8 +10,6 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
-
-import h5py
 import numpy as np
 import time
 import os
@@ -19,6 +17,8 @@ import datetime
 from datetime import datetime
 
 import logging
+
+from parameter_sweep.writer import get_h5_file
 
 __author__ = "Alexander V. Dudchenko (SLAC)"
 
@@ -42,11 +42,11 @@ def merge_data_into_file(
     run_sweep = True
     if os.path.isfile(file_name) == False:
         create_h5_file(file_name)
-    h5file = h5py.File(file_name, "a")
+    h5file = get_h5_file(file_name, "a")
 
     # check if there is a back up
     if isinstance(backup_file_name, str):
-        f_old_solutions = h5py.File(backup_file_name, "r")
+        f_old_solutions = get_h5_file(backup_file_name, "r")
         if (
             directory in f_old_solutions
             and "solve_successful" in f_old_solutions[directory]
@@ -104,7 +104,7 @@ def create_backup_file(file_name, backup_name, h5_dir):
     renames existing file"""
 
     if backup_name is None and os.path.isfile(file_name):
-        h5file = h5py.File(file_name, "r")
+        h5file = get_h5_file(file_name, "r")
 
         if h5_dir in h5file:
             # need to close file before renaming it
@@ -122,15 +122,4 @@ def create_backup_file(file_name, backup_name, h5_dir):
 def create_h5_file(file_name):
     """used to created h5file, retry in case disk is busy"""
     if os.path.isfile(file_name) == False:
-        file_created = False
-        for i in range(60):
-            try:
-                f = h5py.File(file_name, "w")
-                f.close()
-                file_created = True
-                break
-            except:
-                _log.warning("Could note create h5 file {}".format(file_name))
-                time.sleep(0.01)  # Waiting to see if file is free to create again
-        if file_created == False:
-            raise OSError("Could not create file {}".format(file_name))
+        f = get_h5_file(file_name, "w")
