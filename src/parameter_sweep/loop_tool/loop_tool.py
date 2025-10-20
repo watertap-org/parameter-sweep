@@ -35,7 +35,7 @@ def get_working_dir():
 class loopTool:
     def __init__(
         self,
-        loop_file,
+        loop_configuration,
         solver=None,
         build_function=None,
         initialize_function=None,
@@ -56,7 +56,7 @@ class loopTool:
         Loop tool class that runs iterative paramter sweeps
 
         Arguments:
-            loop_file : .yaml config file that contains iterative loops to run
+            loop_configuration : .yaml file or dict that contains iterative loops
             solver : solver to use in model, default uses watertap solver
             build_function : function to build unit model
             initialize_function : function for initialization of the unit model
@@ -76,7 +76,7 @@ class loopTool:
                                 use as many workers as specified to run through all loop options in parallel.
         """
 
-        self.loop_file = loop_file
+        self.loop_configuration = loop_configuration
         self.solver = solver
 
         self.build_function = build_function
@@ -132,8 +132,10 @@ class loopTool:
         """
         This builds the dict that will be used for simulations
         """
-
-        loop_dict = ParameterSweepReader()._yaml_to_dict(self.loop_file)
+        if isinstance(self.loop_configuration, dict):
+            loop_dict = self.loop_configuration
+        else:
+            loop_dict = ParameterSweepReader()._yaml_to_dict(self.loop_configuration)
         self.sweep_directory = {}
         for key, loop in loop_dict.items():
             self.check_dict_keys(loop)
@@ -160,6 +162,7 @@ class loopTool:
                 self.save_dir,
                 self.h5_directory,
             )
+        # assert False
 
     def check_dict_keys(self, test_dict):
         """used to test supported key in provided .yaml file"""
@@ -247,8 +250,8 @@ class loopTool:
     def build_sweep_directories(
         self, loop, loop_type, sweep_directory, cur_dir, cur_h5_dir
     ):
-        """this creats the loop directory dict, which is then used to run
-        the paramter sweep"""
+        """this creates the loop directory dict, which is then used to run
+        the parameter sweep"""
         if loop_type != None:
             loop_type_recursive = self.get_loop_type(loop)
             loop_key_current = self.get_loop_key(loop, loop_type)
@@ -308,7 +311,12 @@ class loopTool:
                                 "original_options_dict": copy.deepcopy(self.options),
                             }
                         }
-
+                        print(
+                            "val",
+                            sweep_directory[loop_value]["simulation_setup"][
+                                "build_defaults"
+                            ],
+                        )
         return sweep_directory, cur_dir
 
     def update_dir_path(self, cur_dir, key, value):
@@ -483,8 +491,9 @@ class loopTool:
         for key, value in sweep_directory.items():
             if key != "simulation_setup":
                 self.find_execution_configs(value)
+
             else:
-                self.execution_list.append(value)
+                self.execution_list.append(copy.deepcopy(value))
 
     def execute_param_sweep_run(self, value):
         """this executes the parameter sweep
@@ -508,7 +517,7 @@ class loopTool:
         tool, resets any of prior options"""
         self.init_sim_options()
         self.options = value["original_options_dict"]
-        self.build_default = value["build_defaults"]
+        self.build_defaults = value["build_defaults"]
         self.optimize_defaults = value["optimize_defaults"]
 
         self.init_defaults = value["init_defaults"]
@@ -555,9 +564,11 @@ class loopTool:
         )
         self.build_outputs_kwargs = self.options.get("build_outputs_kwargs", None)
         # generated combined build kwargs (default + loop)
-        self.combined_build_defaults = {}  # self.build_default
+        self.combined_build_defaults = {}  # self.build_defaults
         self.combined_build_defaults.update(self.options.get("build_defaults", {}))
-        self.combined_build_defaults.update(self.build_default)
+        print("build_defaults", self.build_defaults)
+        self.combined_build_defaults.update(self.build_defaults)
+        print(self.combined_build_defaults)
         # generated combined optimize kwargs (default + loop)
         self.combined_optimize_defaults = {}
         self.combined_optimize_defaults.update(
