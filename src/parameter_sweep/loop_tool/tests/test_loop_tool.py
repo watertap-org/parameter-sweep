@@ -118,8 +118,6 @@ def loop_sweep_setup_from_dict():
     )
     lp.build_run_dict()
     """ used to generate test file"""
-    # with open("test_expected_sweep_directory.yaml", "w") as file:
-    #     documents = yaml.dump(lp.sweep_directory, file)
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):

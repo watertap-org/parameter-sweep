@@ -162,7 +162,6 @@ class loopTool:
                 self.save_dir,
                 self.h5_directory,
             )
-        # assert False
 
     def check_dict_keys(self, test_dict):
         """used to test supported key in provided .yaml file"""
