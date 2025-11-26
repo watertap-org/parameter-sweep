@@ -310,12 +310,6 @@ class loopTool:
                                 "original_options_dict": copy.deepcopy(self.options),
                             }
                         }
-                        print(
-                            "val",
-                            sweep_directory[loop_value]["simulation_setup"][
-                                "build_defaults"
-                            ],
-                        )
         return sweep_directory, cur_dir
 
     def update_dir_path(self, cur_dir, key, value):
@@ -490,7 +484,6 @@ class loopTool:
         for key, value in sweep_directory.items():
             if key != "simulation_setup":
                 self.find_execution_configs(value)
-
             else:
                 self.execution_list.append(copy.deepcopy(value))
 
