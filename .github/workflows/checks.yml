@@ -51,6 +51,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
         os:
           - linux
           - win64
@@ -60,10 +61,10 @@ jobs:
           - os: win64
             os-version: windows-2022
           - install-mode: dev
-            python-version: "3.11"  # choice of Python version is arbitrary among those in matrix
+            python-version: "3.12"  # choice of Python version is arbitrary among those in matrix
             coverage: "true"
           - install-mode: dev
-            python-version: "3.11"
+            python-version: "3.12"
             mpi: "true"
 
     steps:
