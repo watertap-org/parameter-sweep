@@ -20,8 +20,9 @@ from parameter_sweep.parallel.parallel_manager_factory import (
 from parameter_sweep._compat import get_solver
 import copy
 import os
-import h5py
 import numpy as np
+from concurrent.futures import ProcessPoolExecutor
+import warnings
 
 __author__ = "Alexander V. Dudchenko (SLAC)"
 
@@ -49,6 +50,7 @@ class loopTool:
         custom_do_param_sweep=None,
         custom_do_param_sweep_kwargs=None,
         h5_backup=None,
+        num_loop_workers=None,
     ):
         """
         Loop tool class that runs iterative paramter sweeps
@@ -57,21 +59,21 @@ class loopTool:
             loop_file : .yaml config file that contains iterative loops to run
             solver : solver to use in model, default uses watertap solver
             build_function : function to build unit model
-            initialize_function : function for intilization of th eunit model
+            initialize_function : function for initialization of the unit model
             optimize_function : function for solving model
             build_outputs : function to build selected outputs
             probe_function : Function to probe if a solution should be attempted or not
             save_name : name to use when saving the file with
             save_dir : directory to save the file in
             number_of_subprocesses : user defined number of subprocesses to use for parallel run, defaults to either
-            max number of logical cores, if set to False, will disable MPI and set number_of_subpressess to 0
+            max number of logical cores, if set to False, will disable MPI and set number_of_subprocesses to 0
             custom_do_param_sweep : custom param function (refer to parameter sweep tool)
             custom_do_param_sweep_kwargs : custom parm kwargs (refer to parameter sweep tool)
-
             execute_simulations : of looptool should execute simulations upon setup,
                                     other user can call build_run_dict, and run_simulations call manually
             h5_backup : Set location for back up file, if set to False, no backup will be created, otherwise backup will be autocreated
-
+            num_loop_workers : number of workers to use for loop_tool, if set to None, will run loop in serial, otherwise will
+                                use as many workers as specified to run through all loop options in parallel.
         """
 
         self.loop_file = loop_file
@@ -88,15 +90,22 @@ class loopTool:
         self.number_of_subprocesses = number_of_subprocesses
         self.parallel_back_end = parallel_back_end
 
-        self.test_mode = False
-
         self.custom_do_param_sweep = custom_do_param_sweep
         self.custom_do_param_sweep_kwargs = custom_do_param_sweep_kwargs
 
         self.build_outputs = build_outputs
         self.h5_backup_location = h5_backup
-
-        """ supported keys for yaml config file. please update as new options are added"""
+        self.num_loop_workers = num_loop_workers
+        if (
+            self.num_loop_workers is not None
+            and self.num_loop_workers > 1
+            and number_of_subprocesses is not None
+            and number_of_subprocesses > 1
+        ):
+            warnings.warn(
+                "When running more than one loop worker, multiple subprocesses are not supported and might lead to unexpected behavior."
+            )
+        # supported keys for yaml config file. please update as new options are added
         self._supported_default_options = [
             "initialize_before_sweep",
             "update_sweep_params_before_init",
@@ -121,7 +130,7 @@ class loopTool:
 
     def build_run_dict(self):
         """
-        This builds the dict that will be used for simulatiuons
+        This builds the dict that will be used for simulations
         """
 
         loop_dict = ParameterSweepReader()._yaml_to_dict(self.loop_file)
@@ -132,6 +141,16 @@ class loopTool:
             self.init_sim_options()
             self.save_dir = self.save_dir + "/" + key
             self.h5_directory = key
+            val = self.h5_directory.split("/")[0]
+            self.h5_file_location = (
+                self.h5_file_location_default + "_analysisType_" + str(val) + ".h5"
+            )
+            if has_mpi_peer_processes() == False or (
+                has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+            ):
+                self.h5_backup_location = create_backup_file(
+                    self.h5_file_location, self.h5_backup_location, self.h5_directory
+                )
             loop_type = self.get_loop_type(loop)
             self.options = loop
             self.sweep_directory[key], _ = self.build_sweep_directories(
@@ -180,17 +199,24 @@ class loopTool:
 
     def run_simulations(self):
         """runs the simulations created in build_run_dict"""
+        self.execution_list = []
+        self.find_execution_configs(self.sweep_directory)
 
-        self.execute_sweep(self.sweep_directory)
+        if self.num_loop_workers is None or self.num_loop_workers <= 1:
+            for value in self.execution_list:
+                self.execute_param_sweep_run(value)
+        else:
 
-    def run_model_test(self):
-        """function to run a single test, with out param sweep"""
-        self.test_mode = True
-        self.execute_sweep(self.sweep_directory)
-        self.test_mode = False
+            with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
+                [
+                    r
+                    for r in executor.map(
+                        self.execute_param_sweep_run, self.execution_list
+                    )
+                ]
 
     def get_loop_type(self, loop):
-        """containst types of loop options that are extracted from yaml file
+        """Contains types of loop options that are extracted from yaml file
         build_loop - options that are passed into build function
         init_loop - options that are passed into initialization function
         optimize_loop - options that are passed into optimize function
@@ -264,6 +290,7 @@ class loopTool:
                             "simulation_setup": {
                                 "dir": local_dir,
                                 "h5dir": h5_local_dir,
+                                "h5_backup_location": self.h5_backup_location,
                                 "build_defaults": copy.deepcopy(self.build_defaults),
                                 "init_defaults": copy.deepcopy(self.init_defaults),
                                 "optimize_defaults": copy.deepcopy(
@@ -446,20 +473,18 @@ class loopTool:
         self.h5_file_location_default = self.save_dir
         self.h5_directory = ""
 
-    def execute_sweep(
+    def find_execution_configs(
         self,
         sweep_directory,
     ):
         """runs through sweep directory and execute each simulation
         unless in test mode, in which only try build, init, and solve"""
+
         for key, value in sweep_directory.items():
             if key != "simulation_setup":
-                self.execute_sweep(value)
-            elif self.test_mode:
-                self.test_setup(value)
-                break
+                self.find_execution_configs(value)
             else:
-                self.execute_param_sweep_run(value)
+                self.execution_list.append(value)
 
     def execute_param_sweep_run(self, value):
         """this executes the parameter sweep
@@ -489,10 +514,14 @@ class loopTool:
         self.init_defaults = value["init_defaults"]
         self.save_dir = value["dir"]
         self.h5_directory = value["h5dir"]
+
         val = self.h5_directory.split("/")[0]
 
         self.h5_file_location = (
             self.h5_file_location_default + "_analysisType_" + str(val) + ".h5"
+        )
+        self.h5_backup_location = value.get(
+            "h5_backup_location", self.h5_backup_location
         )
         # resets it if file name changes
         if (
@@ -510,7 +539,7 @@ class loopTool:
         first loading defaults provided by default calls, followed
         by those in the loops, overriding any defaults or adding new
         options to kwargs"""
-        # check if user wants to reinit befoure sweep.
+        # check if user wants to reinit before sweep.
 
         self.initialize_before_sweep = self.options.get(
             "initialize_before_sweep", False
@@ -548,7 +577,6 @@ class loopTool:
         )
         create_h5_file(self.h5_file_location)
 
-        sucess_feasible = self.expected_num_samples
         run_sweep = merge_data_into_file(
             self.h5_file_location,
             self.h5_backup_location,
@@ -609,6 +637,7 @@ class loopTool:
         # setup parameter sweep tool
         ps_kwargs = {}
         ps_kwargs["csv_results_file_name"] = None
+        # the file is saved with delayed_h5_writer to ensure all results are written
         ps_kwargs["h5_results_file_name"] = self.cur_h5_file[0]
         ps_kwargs["h5_parent_group_name"] = self.cur_h5_file[1]
 
@@ -663,9 +692,6 @@ class loopTool:
         self.combined_init_defaults.update({"solver": solver})
         # add solver to optimize kwarg
         self.combined_optimize_defaults.update({"solver": solver})
-
-        # legacy, need to build m
-        m = self.build_function(**self.combined_build_defaults)
 
         # setup parmater sweep tool
         ps_kwargs = {}

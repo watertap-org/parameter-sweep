@@ -21,6 +21,7 @@ diff_tests:
           diff_samples: 1
           expected_num_samples: 1
           force_rerun: null
+          h5_backup_location: null
           h5dir: diff_tests/erd_type/pressure_exchanger/membrane_cost
           init_defaults: {}
           min_num_samples: 10
@@ -125,6 +126,7 @@ diff_tests:
           diff_samples: 1
           expected_num_samples: null
           force_rerun: null
+          h5_backup_location: null
           h5dir: diff_tests/erd_type/pressure_exchanger/membrane_group
           init_defaults: {}
           min_num_samples: null
@@ -224,6 +226,7 @@ diff_tests:
           diff_samples: 1
           expected_num_samples: 1
           force_rerun: null
+          h5_backup_location: null
           h5dir: diff_tests/erd_type/pump_as_turbine/membrane_cost
           init_defaults: {}
           min_num_samples: 10
@@ -328,6 +331,7 @@ diff_tests:
           diff_samples: 1
           expected_num_samples: null
           force_rerun: null
+          h5_backup_location: null
           h5dir: diff_tests/erd_type/pump_as_turbine/membrane_group
           init_defaults: {}
           min_num_samples: null
@@ -419,6 +423,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 3
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pressure_exchanger/sim_cases/case_a/fixed_samples
               init_defaults:
                 erd_type: pump_as_turbine
@@ -497,6 +502,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 20
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pressure_exchanger/sim_cases/case_a/membrane_cost
               init_defaults:
                 erd_type: pump_as_turbine
@@ -574,6 +580,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 4
               force_rerun: null
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pressure_exchanger/sim_cases/case_a/membrane_group
               init_defaults:
                 erd_type: pump_as_turbine
@@ -655,6 +662,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 3
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pressure_exchanger/sim_cases/case_b/fixed_samples
               init_defaults:
                 erd_type: pressure_exchanger
@@ -733,6 +741,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 20
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pressure_exchanger/sim_cases/case_b/membrane_cost
               init_defaults:
                 erd_type: pressure_exchanger
@@ -810,6 +819,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 4
               force_rerun: null
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pressure_exchanger/sim_cases/case_b/membrane_group
               init_defaults:
                 erd_type: pressure_exchanger
@@ -893,6 +903,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 3
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pump_as_turbine/sim_cases/case_a/fixed_samples
               init_defaults:
                 erd_type: pump_as_turbine
@@ -971,6 +982,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 20
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pump_as_turbine/sim_cases/case_a/membrane_cost
               init_defaults:
                 erd_type: pump_as_turbine
@@ -1048,6 +1060,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 4
               force_rerun: null
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pump_as_turbine/sim_cases/case_a/membrane_group
               init_defaults:
                 erd_type: pump_as_turbine
@@ -1129,6 +1142,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 3
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pump_as_turbine/sim_cases/case_b/fixed_samples
               init_defaults:
                 erd_type: pressure_exchanger
@@ -1207,6 +1221,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 20
               force_rerun: true
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pump_as_turbine/sim_cases/case_b/membrane_cost
               init_defaults:
                 erd_type: pressure_exchanger
@@ -1284,6 +1299,7 @@ sweep_tests:
               diff_samples: 0
               expected_num_samples: 4
               force_rerun: null
+              h5_backup_location: null
               h5dir: sweep_tests/erd_type/pump_as_turbine/sim_cases/case_b/membrane_group
               init_defaults:
                 erd_type: pressure_exchanger

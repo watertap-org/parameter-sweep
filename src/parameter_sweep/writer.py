@@ -16,10 +16,27 @@ import itertools
 import pprint
 import copy
 import numpy as np
-
+import time
 from scipy.interpolate import griddata
 
 from pyomo.common.config import ConfigDict, ConfigValue
+
+
+def get_h5_file(file_name, mode="a"):
+    for i in range(60):
+        try:
+            h5file = h5py.File(file_name, mode)
+            return h5file
+        except OSError as e:
+            print(
+                "\nCould not open file {}, attempt {}/60 waiting for {} seconds\n".format(
+                    file_name, i + 1, i
+                )
+            )
+            # ensure we wait a bit before trying again especially if there
+            # are many workers trying to access the file
+            time.sleep(i)
+    raise OSError("Could not open file {} after 60 attempts".format(file_name))
 
 
 class ParameterSweepWriter:
@@ -198,16 +215,16 @@ class ParameterSweepWriter:
     def _write_output_to_h5(self, output_dict, h5_results_file_name):
         if self.config.h5_parent_group_name is None:
             # No parent groups exists, a new file will be created regardless
-            f = h5py.File(h5_results_file_name, "w")
+            f = get_h5_file(h5_results_file_name, "w")
             parent_grp = f
         else:
             if os.path.isfile(h5_results_file_name):
                 # File exists, we only need to add the new parent group
-                f = h5py.File(h5_results_file_name, "a")
+                f = get_h5_file(h5_results_file_name, "a")
                 parent_grp = f.require_group(self.config.h5_parent_group_name)
             else:
                 # Create a new file since none exists and add the parent group
-                f = h5py.File(h5_results_file_name, "w")
+                f = get_h5_file(h5_results_file_name, "w")
                 parent_grp = f.require_group(self.config.h5_parent_group_name)
 
         for key, item in output_dict.items():

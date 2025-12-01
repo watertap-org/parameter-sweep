@@ -21,7 +21,7 @@ from parameter_sweep.parameter_sweep import (
 from parameter_sweep.parallel.single_process_parallel_manager import (
     SingleProcessParallelManager,
 )
-
+from parameter_sweep.model_manager import ModelManager
 from pyomo.common.deprecation import deprecation_warning
 from parameter_sweep.parallel_utils import (
     _ParameterSweepParallelUtils,
@@ -466,11 +466,15 @@ class DifferentialParameterSweep(_ParameterSweepBase, _ParameterSweepParallelUti
         self.config.build_model_kwargs = build_model_kwargs
         self.config.build_sweep_params_kwargs = build_sweep_params_kwargs
 
-        model = build_model(**build_model_kwargs)
-        sweep_params = build_sweep_params(model, **build_sweep_params_kwargs)
+        self.model_manager = ModelManager(self)
+        self.model_manager.build_and_init()
+        sweep_params = build_sweep_params(
+            self.model_manager.model, **build_sweep_params_kwargs
+        )
         sweep_params, sampling_type = self._process_sweep_params(sweep_params)
         differential_sweep_spec = self.config.build_differential_sweep_specs(
-            model, **self.config.build_differential_sweep_specs_kwargs
+            self.model_manager.model,
+            **self.config.build_differential_sweep_specs_kwargs,
         )
         # Check if the keys in the differential sweep specs exist in sweep params
         self._check_differential_sweep_key_validity(

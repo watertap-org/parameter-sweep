@@ -15,6 +15,7 @@ import numpy as np
 import h5py
 import yaml
 
+import time
 from parameter_sweep.loop_tool.loop_tool import loopTool, get_working_dir
 from parameter_sweep.parallel.parallel_manager_factory import (
     has_mpi_peer_processes,
@@ -33,7 +34,7 @@ _this_file_path = os.path.dirname(os.path.abspath(__file__))
 
 def diff_dict_check(dicta, dictb):
     for key in dicta:
-        if key != "dir":
+        if key != "dir" and key != "h5_backup_location":
             if isinstance(dicta[key], dict):
                 diff_dict_check(dicta[key], dictb[key])
 
@@ -81,6 +82,35 @@ def loop_sweep_setup():
         save_name="ro_with_erd",
         execute_simulations=False,
         number_of_subprocesses=1,
+    )
+    lp.build_run_dict()
+    """ used to generate test file"""
+    # with open("test_expected_sweep_directory.yaml", "w") as file:
+    #     documents = yaml.dump(lp.sweep_directory, file)
+    if has_mpi_peer_processes() == False or (
+        has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+    ):
+        with open(
+            _this_file_path + "/test_expected_sweep_directory.yaml", "r"
+        ) as infile:
+            expected_run_dict = yaml.safe_load(infile)
+    else:
+        expected_run_dict = None
+    return lp, expected_run_dict
+
+
+@pytest.fixture()
+def loop_sweep_setup_with_workers():
+    lp = loopTool(
+        _this_file_path + "/test_sweep.yaml",
+        build_function=ro_setup.ro_build,
+        initialize_function=ro_setup.ro_init,
+        optimize_function=ro_setup.ro_solve,
+        saving_dir=_this_file_path,
+        save_name="ro_with_erd",
+        execute_simulations=False,
+        number_of_subprocesses=1,
+        num_loop_workers=2,
     )
     lp.build_run_dict()
     """ used to generate test file"""
@@ -189,9 +219,16 @@ def test_diff_setup(loop_diff_setup):
         assert diff_dict_check(lp.sweep_directory, expected_run_dict)
 
 
-@pytest.mark.component
-def test_sweep_run(loop_sweep_setup):
-    lp, test_file = loop_sweep_setup
+@pytest.mark.parametrize(
+    "loop_workers",
+    [False, True],
+)
+def test_sweep_run(loop_sweep_setup, loop_sweep_setup_with_workers, loop_workers):
+    if loop_workers and has_mpi_peer_processes() == False:
+        lp, test_file = loop_sweep_setup_with_workers
+    else:
+        lp, test_file = loop_sweep_setup
+
     lp.build_run_dict()
     # remove any existing file before test
     if has_mpi_peer_processes() == False or (
@@ -201,6 +238,10 @@ def test_sweep_run(loop_sweep_setup):
             os.remove(lp.h5_file_location_default + "_analysisType_ro_analysis.h5")
 
     lp.run_simulations()
+    if loop_workers:
+        time.sleep(20)  # ensure it wrote all the files, in loop worker mode
+        # we can expect delays as workers wait for files to become available.
+
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
@@ -270,6 +311,8 @@ def test_sweep_backup(loop_sweep_setup):
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
+
+        print(lp.h5_backup_location)
         assert lp.h5_backup_location != None
         h5file = h5py.File(
             lp.h5_file_location_default + "_analysisType_ro_analysis.h5", "r"
@@ -312,7 +355,9 @@ def test_diff_run(loop_diff_setup):
             lp.h5_file_location_default + "_analysisType_ro_diff_analysis.h5"
         ):
             os.remove(lp.h5_file_location_default + "_analysisType_ro_diff_analysis.h5")
+    print(lp.h5_backup_location)
     lp.run_simulations()
+
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
