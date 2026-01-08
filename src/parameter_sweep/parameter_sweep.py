@@ -1144,7 +1144,14 @@ class RecursiveParameterSweep(_ParameterSweepBase):
 
             # The total number of samples to generate at the next iteration is a multiple of the total remaining samples
             scale_factor = 2.0 / max(success_prob, 0.10)
-            num_total_samples = int(np.ceil(scale_factor * n_samples_remaining))
+            ceil = np.ceil(scale_factor * n_samples_remaining)
+            if isinstance(ceil, (np.ndarray, list)):
+                warnings.warn(
+                    f"Ceil is array or list, taking first element only. {ceil}"
+                )
+                num_total_samples = int(ceil[0])
+            elif isinstance(ceil, (int, float)):
+                num_total_samples = int(np.ceil(scale_factor * n_samples_remaining))
 
         # Now that we have all of the local output dictionaries, we need to construct
         # a consolidated dictionary based on a filter, e.g., optimal solves.
