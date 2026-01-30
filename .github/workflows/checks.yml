@@ -62,10 +62,10 @@ jobs:
           - install-mode: dev
             python-version: "3.11"  # choice of Python version is arbitrary among those in matrix
             coverage: "true"
-          - install-mode: dev
+          - os: win64 # only run mpi, on windows, until GH starts working again. 
+            install-mode: dev
             python-version: "3.11"
             mpi: "true"
-
     steps:
       - if: matrix.install-mode == 'dev'
         uses: actions/checkout@v4
