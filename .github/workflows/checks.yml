@@ -56,7 +56,7 @@ jobs:
           - win64
         include:
           - os: linux
-            os-version: ubuntu-24.04
+            os-version: ubuntu-22.04
           - os: win64
             os-version: windows-2022
           - install-mode: dev
