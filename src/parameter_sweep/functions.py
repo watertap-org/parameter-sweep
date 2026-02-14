@@ -10,6 +10,8 @@
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
 
+from pyomo.common.deprecation import deprecation_warning
+
 from parameter_sweep.parameter_sweep import (
     ParameterSweep,
     RecursiveParameterSweep,
@@ -137,6 +139,11 @@ def parameter_sweep(
         by ``sweep_params`` and the remaining columns are the values of the
         simulation identified by the ``outputs`` argument.
     """
+
+    deprecation_warning(
+        "parameter_sweep function is deprecated please call the ParameterSweep class instead.",
+        version="0.1.0",
+    )
 
     kwargs = {}
     if csv_results_file_name is not None:
@@ -283,6 +290,11 @@ def recursive_parameter_sweep(
         by ``sweep_params`` and the remaining columns are the values of the
         simulation identified by the ``outputs`` argument.
     """
+
+    deprecation_warning(
+        "recursive_parameter_sweep function is deprecated please call the RecursiveParameterSweep class instead.",
+        version="0.1.0",
+    )
 
     kwargs = {}
     if csv_results_file_name is not None:
@@ -453,6 +465,11 @@ def differential_parameter_sweep(
         by ``sweep_params`` and the remaining columns are the values of the
         simulation identified by the ``outputs`` argument.
     """
+
+    deprecation_warning(
+        "differential_parameter_sweep function is deprecated please call the DifferentialParameterSweep class instead.",
+        version="0.1.0",
+    )
 
     kwargs = {}
     kwargs["build_differential_sweep_specs"] = build_differential_sweep_specs
