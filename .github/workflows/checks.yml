@@ -69,6 +69,10 @@ jobs:
             install-mode: dev
             python-version: "3.11"
             mpi: "true"
+        exclude:
+          # ray has no Python 3.13 wheels for Windows
+          - os: win64
+            python-version: "3.13"
     steps:
       - if: matrix.install-mode == 'dev'
         uses: actions/checkout@v4
@@ -100,7 +104,7 @@ jobs:
         run: echo PYTEST_ADDOPTS="$PYTEST_ADDOPTS --cov --cov-report=xml" >> $GITHUB_ENV
       - name: Run pytest
         run: |
-          pip install pytest  # ensure pytest is installed (should do nothing if already present from requirements-dev.txt)
+          pip install pytest
           pytest --pyargs parameter_sweep
       - name: Upload coverage report as job artifact
         if: matrix.coverage
@@ -119,9 +123,7 @@ jobs:
           src/parameter_sweep/tests/test*parameter_sweep.py \
           src/parameter_sweep/loop_tool/tests/test*loop_tool.py \
           --no-cov
-          # merge into single report
           coverage combine
-          # convert to XML
           coverage xml
       - name: Upload coverage report as job artifact
         if: matrix.mpi
@@ -136,7 +138,6 @@ jobs:
     needs: [pytest]
     runs-on: ubuntu-latest
     steps:
-      # the checkout step is needed to have access to codecov.yml
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -149,8 +150,6 @@ jobs:
           fail_ci_if_error: true
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
-          # downgrading after v0.7.0 broke tokenless upload
-          # see codecov/codecov-action#1487
           version: v0.6.0
 
   build-docs:
