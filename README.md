@@ -26,3 +26,7 @@ pytest --pyargs parameter_sweep
 ```sh
 black .
 ```
+
+## Known Limitations
+- `ray` does not currently provide wheels for Windows + Python 3.13.
+  Use Python 3.12 on Windows if you need the `ray` extra.
