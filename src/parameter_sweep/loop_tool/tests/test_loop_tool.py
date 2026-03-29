@@ -9,6 +9,7 @@
 # information, respectively. These files are also available online at the URL
 # "https://github.com/watertap-org/watertap/"
 #################################################################################
+from parameter_sweep.reader import ParameterSweepReader
 import pytest
 import os
 import numpy as np
@@ -87,6 +88,36 @@ def loop_sweep_setup():
     """ used to generate test file"""
     # with open("test_expected_sweep_directory.yaml", "w") as file:
     #     documents = yaml.dump(lp.sweep_directory, file)
+    if has_mpi_peer_processes() == False or (
+        has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+    ):
+        with open(
+            _this_file_path + "/test_expected_sweep_directory.yaml", "r"
+        ) as infile:
+            expected_run_dict = yaml.safe_load(infile)
+    else:
+        expected_run_dict = None
+    return lp, expected_run_dict
+
+
+@pytest.fixture()
+def loop_sweep_setup_from_dict():
+    dict_setup = ParameterSweepReader()._yaml_to_dict(
+        _this_file_path + "/test_sweep.yaml"
+    )
+
+    lp = loopTool(
+        dict_setup,
+        build_function=ro_setup.ro_build,
+        initialize_function=ro_setup.ro_init,
+        optimize_function=ro_setup.ro_solve,
+        saving_dir=_this_file_path,
+        save_name="ro_with_erd",
+        execute_simulations=False,
+        number_of_subprocesses=1,
+    )
+    lp.build_run_dict()
+    """ used to generate test file"""
     if has_mpi_peer_processes() == False or (
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
@@ -203,6 +234,17 @@ def test_sweep_setup(loop_sweep_setup):
         has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
     ):
         lp, expected_run_dict = loop_sweep_setup
+        lp.build_run_dict()
+
+        assert diff_dict_check(lp.sweep_directory, expected_run_dict)
+
+
+@pytest.mark.component
+def test_sweep_setup_from_dict(loop_sweep_setup_from_dict):
+    if has_mpi_peer_processes() == False or (
+        has_mpi_peer_processes() and get_mpi_comm_process().Get_rank() == 0
+    ):
+        lp, expected_run_dict = loop_sweep_setup_from_dict
         lp.build_run_dict()
 
         assert diff_dict_check(lp.sweep_directory, expected_run_dict)
