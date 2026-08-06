@@ -51,6 +51,7 @@ class loopTool:
         custom_do_param_sweep_kwargs=None,
         h5_backup=None,
         num_loop_workers=None,
+        chunk_size=None,
     ):
         """
         Loop tool class that runs iterative paramter sweeps
@@ -74,6 +75,8 @@ class loopTool:
             h5_backup : Set location for back up file, if set to False, no backup will be created, otherwise backup will be autocreated
             num_loop_workers : number of workers to use for loop_tool, if set to None, will run loop in serial, otherwise will
                                 use as many workers as specified to run through all loop options in parallel.
+            chunk_size: chunk size to use for parallel loop workers, if none, will be used if number of samples is 10x number of loop workers, the chunk size will
+                           be set to the number of samples divided by the number of loop workers minus 10
         """
 
         self.loop_file = loop_file
@@ -96,6 +99,7 @@ class loopTool:
         self.build_outputs = build_outputs
         self.h5_backup_location = h5_backup
         self.num_loop_workers = num_loop_workers
+        self.chunk_size = chunk_size
         if (
             self.num_loop_workers is not None
             and self.num_loop_workers > 1
@@ -201,17 +205,27 @@ class loopTool:
         """runs the simulations created in build_run_dict"""
         self.execution_list = []
         self.find_execution_configs(self.sweep_directory)
-
         if self.num_loop_workers is None or self.num_loop_workers <= 1:
             for value in self.execution_list:
                 self.execute_param_sweep_run(value)
         else:
-
+            chunk_size = 1
+            if (
+                len(self.execution_list) // self.num_loop_workers > 10
+                and self.chunk_size is None
+            ):
+                chunk_size = max(
+                    1, len(self.execution_list) // self.num_loop_workers - 10
+                )
+            else:
+                chunk_size = self.chunk_size
             with ProcessPoolExecutor(max_workers=self.num_loop_workers) as executor:
                 [
                     r
                     for r in executor.map(
-                        self.execute_param_sweep_run, self.execution_list
+                        self.execute_param_sweep_run,
+                        self.execution_list,
+                        chunksize=chunk_size,
                     )
                 ]
 

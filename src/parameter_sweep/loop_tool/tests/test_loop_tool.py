@@ -111,6 +111,7 @@ def loop_sweep_setup_with_workers():
         execute_simulations=False,
         number_of_subprocesses=1,
         num_loop_workers=2,
+        chunk_size=1,
     )
     lp.build_run_dict()
     """ used to generate test file"""
